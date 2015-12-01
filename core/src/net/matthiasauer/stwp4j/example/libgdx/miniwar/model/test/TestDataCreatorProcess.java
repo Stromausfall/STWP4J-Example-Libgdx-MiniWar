@@ -1,19 +1,17 @@
 package net.matthiasauer.stwp4j.example.libgdx.miniwar.model.test;
 
-import java.util.Random;
-
 import net.matthiasauer.stwp4j.ChannelOutPort;
 import net.matthiasauer.stwp4j.ChannelPortsCreated;
 import net.matthiasauer.stwp4j.ChannelPortsRequest;
 import net.matthiasauer.stwp4j.ExecutionState;
 import net.matthiasauer.stwp4j.LightweightProcess;
 import net.matthiasauer.stwp4j.PortType;
-import net.matthiasauer.stwp4j.example.libgdx.miniwar.gui.render.RenderData;
+import net.matthiasauer.stwp4j.libgdx.gui.RenderData;
+import net.matthiasauer.stwp4j.libgdx.gui.RenderPositionUnit;
+import net.matthiasauer.stwp4j.libgdx.gui.SpriteRenderData;
 
 public class TestDataCreatorProcess extends LightweightProcess {
     private ChannelOutPort<RenderData> renderDataChannel;
-    private Random random = new Random();
-    private TestRenderData renderData = new TestRenderData();
     private final int startX;
     private final int startY;
 
@@ -30,13 +28,10 @@ public class TestDataCreatorProcess extends LightweightProcess {
 
     @Override
     public ExecutionState execute() {
-        this.renderData.setBitmap("badlogic.jpg");
-        
-        // limit
-        this.renderData.setX(Math.max(startX, Math.min(startX + 200, this.renderData.getX() + (1 - this.random.nextInt(3)))));
-        this.renderData.setY(Math.max(startY, Math.min(startY + 200, this.renderData.getY() + (1 - this.random.nextInt(3)))));
-        
-        this.renderDataChannel.offer(this.renderData);
+        SpriteRenderData data = new SpriteRenderData();
+        data.set(startX, startY, 0, RenderPositionUnit.Pixels, null, 1, true, "normalCity");
+
+        this.renderDataChannel.offer(data);
         
         return ExecutionState.Finished;
     }

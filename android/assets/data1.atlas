@@ -1,0 +1,111 @@
+
+data1.png
+size: 1024,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+attackTarget
+  rotate: false
+  xy: 2, 2
+  size: 96, 96
+  orig: 96, 96
+  offset: 0, 0
+  index: -1
+fourUnit
+  rotate: false
+  xy: 296, 34
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+infantry
+  rotate: false
+  xy: 816, 164
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+moveTarget
+  rotate: false
+  xy: 522, 132
+  size: 96, 96
+  orig: 96, 96
+  offset: 0, 0
+  index: -1
+nextTurn
+  rotate: false
+  xy: 100, 2
+  size: 96, 96
+  orig: 96, 96
+  offset: 0, 0
+  index: -1
+normalCity
+  rotate: false
+  xy: 620, 132
+  size: 96, 96
+  orig: 96, 96
+  offset: 0, 0
+  index: -1
+oneUnit
+  rotate: false
+  xy: 362, 34
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+selection
+  rotate: false
+  xy: 198, 2
+  size: 96, 96
+  orig: 96, 96
+  offset: 0, 0
+  index: -1
+threeUnit
+  rotate: false
+  xy: 882, 164
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tile_dirt
+  rotate: false
+  xy: 2, 100
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+tile_grass
+  rotate: false
+  xy: 132, 100
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+tile_mountain
+  rotate: false
+  xy: 262, 100
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+tile_owner
+  rotate: false
+  xy: 392, 100
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+twoUnit
+  rotate: false
+  xy: 428, 34
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+unsupplied
+  rotate: false
+  xy: 718, 132
+  size: 96, 96
+  orig: 96, 96
+  offset: 0, 0
+  index: -1
