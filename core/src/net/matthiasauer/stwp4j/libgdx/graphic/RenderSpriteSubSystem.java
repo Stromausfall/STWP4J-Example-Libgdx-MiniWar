@@ -1,4 +1,4 @@
-package net.matthiasauer.stwp4j.libgdx.gui;
+package net.matthiasauer.stwp4j.libgdx.graphic;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;

@@ -1,4 +1,4 @@
-package net.matthiasauer.stwp4j.libgdx.gui;
+package net.matthiasauer.stwp4j.libgdx.graphic;
 
 import com.badlogic.gdx.math.Rectangle;
 

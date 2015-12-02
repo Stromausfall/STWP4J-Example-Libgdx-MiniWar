@@ -86,6 +86,19 @@ project(":html") {
 
 project(":core") {
     apply plugin: "java"
+    
+    sourceSets {
+        main {
+            java {
+                srcDir 'src'
+            }
+        }
+        test {
+            java {
+                srcDir "test"
+            }
+        }
+    }
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"

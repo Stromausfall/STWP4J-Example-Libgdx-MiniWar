@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import net.matthiasauer.stwp4j.example.libgdx.miniwar.model.test.TestDataCreatorProcess;
 import net.matthiasauer.stwp4j.libgdx.application.ApplicationEntryPointProcess;
-import net.matthiasauer.stwp4j.libgdx.gui.RenderProcess;
+import net.matthiasauer.stwp4j.libgdx.graphic.RenderProcess;
 
 public class MiniWar extends ApplicationEntryPointProcess {	
 	@Override

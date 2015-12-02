@@ -6,9 +6,9 @@ import net.matthiasauer.stwp4j.ChannelPortsRequest;
 import net.matthiasauer.stwp4j.ExecutionState;
 import net.matthiasauer.stwp4j.LightweightProcess;
 import net.matthiasauer.stwp4j.PortType;
-import net.matthiasauer.stwp4j.libgdx.gui.RenderData;
-import net.matthiasauer.stwp4j.libgdx.gui.RenderPositionUnit;
-import net.matthiasauer.stwp4j.libgdx.gui.SpriteRenderData;
+import net.matthiasauer.stwp4j.libgdx.graphic.RenderData;
+import net.matthiasauer.stwp4j.libgdx.graphic.RenderPositionUnit;
+import net.matthiasauer.stwp4j.libgdx.graphic.SpriteRenderData;
 
 public class TestDataCreatorProcess extends LightweightProcess {
     private ChannelOutPort<RenderData> renderDataChannel;

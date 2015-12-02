@@ -1,4 +1,4 @@
-package net.matthiasauer.stwp4j.libgdx.gui;
+package net.matthiasauer.stwp4j.libgdx.graphic;
 
 /**
  * http://stackoverflow.com/questions/156275/what-is-the-equivalent-of-the-c-pairl-r-in-java
