@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.matthiasauer.stwp4j.ChannelInPort;
+import net.matthiasauer.stwp4j.ChannelOutPort;
 import net.matthiasauer.stwp4j.ChannelPortsCreated;
 import net.matthiasauer.stwp4j.ChannelPortsRequest;
 import net.matthiasauer.stwp4j.ExecutionState;
@@ -36,6 +37,7 @@ public class RenderProcess extends LightweightProcess {
     private final Viewport viewport;
     private ChannelInPort<RenderData> renderDataChannel;
     private ChannelInPort<ApplicationEvent> applicationEventChannel;
+    private ChannelOutPort<RenderedData> renderedDataChannel;
     
     public RenderProcess(List<String> atlasFilePaths) {
         super(
@@ -46,7 +48,11 @@ public class RenderProcess extends LightweightProcess {
                 new ChannelPortsRequest<ApplicationEvent>(
                         ApplicationEntryPointProcess.APPLICATION_EVENT_CHANNEL,
                         PortType.InputMultiplex,
-                        ApplicationEvent.class));
+                        ApplicationEvent.class),
+                new ChannelPortsRequest<RenderedData>(
+                        InteractionProcess.RENDEREDDATA_CHANNEL,
+                        PortType.OutputExclusive,
+                        RenderedData.class));
 
         this.camera = new OrthographicCamera(800, 600);
         this.viewport = new ScreenViewport(this.camera);
@@ -101,6 +107,8 @@ public class RenderProcess extends LightweightProcess {
                 createdChannelPorts.getChannelInPort(RENDERDATA_CHANNEL, RenderData.class);
         this.applicationEventChannel =
                 createdChannelPorts.getChannelInPort(ApplicationEntryPointProcess.APPLICATION_EVENT_CHANNEL, ApplicationEvent.class);
+        this.renderedDataChannel =
+                createdChannelPorts.getChannelOutPort(InteractionProcess.RENDEREDDATA_CHANNEL, RenderedData.class);
     }
 
     @Override
@@ -132,12 +140,12 @@ public class RenderProcess extends LightweightProcess {
             }
 
             if (baseRenderComponent instanceof SpriteRenderData) {
-                this.renderSpriteSubSystem.drawSprite((SpriteRenderData) baseRenderComponent);
+                this.renderSpriteSubSystem.drawSprite((SpriteRenderData) baseRenderComponent, this.renderedDataChannel);
                 continue;
             }
 
             if (baseRenderComponent instanceof TextRenderData) {
-                this.renderTextSubSystem.drawText((TextRenderData) baseRenderComponent);
+                this.renderTextSubSystem.drawText((TextRenderData) baseRenderComponent, this.renderedDataChannel);
                 continue;
             }
 

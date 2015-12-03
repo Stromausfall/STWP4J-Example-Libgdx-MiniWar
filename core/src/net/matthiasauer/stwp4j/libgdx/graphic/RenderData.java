@@ -10,7 +10,6 @@ public abstract class RenderData {
     private Color tint;
     private int renderOrder;
     private boolean renderProjected;
-    private final RenderedData renderedData = new RenderedData();
     
     protected void set(
             float positionX,
@@ -26,10 +25,6 @@ public abstract class RenderData {
         this.tint = tint;
         this.renderOrder = renderOrder;
         this.renderProjected = renderProjected;
-    }
-    
-    public RenderedData getRenderedData() {
-        return this.renderedData;
     }
 
     public Vector2 getPosition() {

@@ -11,6 +11,9 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Pools;
+
+import net.matthiasauer.stwp4j.ChannelOutPort;
 
 class RenderTextSubSystem { 
 	private final Map<String, BitmapFont> fonts = new HashMap<String, BitmapFont>();
@@ -76,7 +79,7 @@ class RenderTextSubSystem {
 		return font;
 	}
 
-	public void drawText(TextRenderData data) {
+	public void drawText(TextRenderData data, ChannelOutPort<RenderedData> renderedDataChannel) {
 	    final Color tint = data.getTint();
 		float actualPositionX =
 				RenderPositionUnitTranslator.translateX(
@@ -130,11 +133,12 @@ class RenderTextSubSystem {
 		this.spriteBatch.setTransformMatrix(oldMatrix);
 		spriteBatch.begin();
 
-		data.getRenderedData().set(
-		        actualPositionX,
-		        actualPositionY - glyphLayout.height,
-		        glyphLayout.width,
-		        glyphLayout.height,
-		        this.camera.zoom);
+        renderedDataChannel.offer(
+                Pools.get(RenderedData.class).obtain().set(
+        		        actualPositionX,
+        		        actualPositionY - glyphLayout.height,
+        		        glyphLayout.width,
+        		        glyphLayout.height,
+        		        this.camera.zoom));
 	}
 }

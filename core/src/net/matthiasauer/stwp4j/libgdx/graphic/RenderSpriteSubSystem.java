@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Pools;
+
+import net.matthiasauer.stwp4j.ChannelOutPort;
 
 class RenderSpriteSubSystem {
 	private final OrthographicCamera camera;
@@ -19,7 +22,7 @@ class RenderSpriteSubSystem {
 		this.textureLoader = textureLoader;
 	}
 	
-	public void drawSprite(SpriteRenderData data) {
+	public void drawSprite(SpriteRenderData data, ChannelOutPort<RenderedData> renderedDataChannel) {
 	    final AtlasRegion texture =
 	            this.textureLoader.getTexture(data.getTextureName());
 	    final Color tint = data.getTint();
@@ -69,12 +72,13 @@ class RenderSpriteSubSystem {
 			this.spriteBatch.setColor(base);
 		}
 		
-		data.getRenderedData().set(
-		        actualPositionX,
-				actualPositionY,
-				texture.getRegionWidth(),
-				texture.getRegionHeight(),
-				this.camera.zoom);
+        renderedDataChannel.offer(
+        		Pools.get(RenderedData.class).obtain().set(
+        		        actualPositionX,
+        				actualPositionY,
+        				texture.getRegionWidth(),
+        				texture.getRegionHeight(),
+        				this.camera.zoom));
 	}
 
 }
