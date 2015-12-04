@@ -27,15 +27,13 @@ class RenderSpriteSubSystem {
 	            this.textureLoader.getTexture(data.getTextureName());
 	    final Color tint = data.getTint();
 		float actualPositionX =
-				RenderPositionUnitTranslator.translateX(
+		        data.getRenderPositionUnit().translateX(
 				        data.getPosition().x,
-				        data.getPosition().y,
-				        data.getRenderPositionUnit()) - texture.getRegionWidth() / 2;
+				        data.getPosition().y) - texture.getRegionWidth() / 2;
 		float actualPositionY =
-				RenderPositionUnitTranslator.translateY(
+		        data.getRenderPositionUnit().translateY(
 				        data.getPosition().x,
-				        data.getPosition().y,
-				        data.getRenderPositionUnit()) - texture.getRegionHeight() / 2;
+				        data.getPosition().y) - texture.getRegionHeight() / 2;
 		float width = texture.getRegionWidth();
 		float height = texture.getRegionHeight();
 		float originX = width/2;

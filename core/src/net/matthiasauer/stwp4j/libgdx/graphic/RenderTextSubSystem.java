@@ -82,15 +82,13 @@ class RenderTextSubSystem {
 	public void drawText(TextRenderData data, ChannelOutPort<RenderedData> renderedDataChannel) {
 	    final Color tint = data.getTint();
 		float actualPositionX =
-				RenderPositionUnitTranslator.translateX(
+		        data.getRenderPositionUnit().translateX(
 				        data.getPosition().x,
-				        data.getPosition().y,
-				        data.getRenderPositionUnit());
+				        data.getPosition().y);
 		float actualPositionY =
-				RenderPositionUnitTranslator.translateY(
+		        data.getRenderPositionUnit().translateY(
                         data.getPosition().x,
-                        data.getPosition().y,
-                        data.getRenderPositionUnit());
+                        data.getPosition().y);
 		
 		if (!data.isRenderProjected()) {
 			actualPositionX *= this.camera.zoom;

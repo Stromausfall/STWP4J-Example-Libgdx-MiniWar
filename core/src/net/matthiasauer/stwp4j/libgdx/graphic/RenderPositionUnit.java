@@ -1,5 +1,7 @@
 package net.matthiasauer.stwp4j.libgdx.graphic;
 
+import com.badlogic.gdx.Gdx;
+
 public enum RenderPositionUnit {
 	/*
 	 * 0,0 is middle
@@ -10,5 +12,27 @@ public enum RenderPositionUnit {
 	/*
 	 * 0,0 is middle
 	 */
-	Pixels
+	Pixels;
+    
+    public float translateX(float x, float y) {
+        float result = x;
+        
+        if (this == Percent) {
+            result =
+                    x * Gdx.graphics.getWidth() / 200;
+        }
+        
+        return result;
+    }
+    
+    public float translateY(float x, float y) {
+        float result = y;
+        
+        if (this == Percent) {
+            result =
+                    y * Gdx.graphics.getHeight() / 200;
+        }
+        
+        return result;
+    }
 }
