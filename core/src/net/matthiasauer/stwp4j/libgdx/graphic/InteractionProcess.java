@@ -208,6 +208,9 @@ public class InteractionProcess extends LightweightProcess implements InputProce
         return false;
     }
     
+    private void getTouchedEntity() {
+    }
+    
     private Entity iterateOverAllEntitiesToFindTouched(InputTouchEventComponent event) {
         int orderOfCurrentTarget = -1;
         Entity touchedEntity = null;
@@ -250,6 +253,7 @@ public class InteractionProcess extends LightweightProcess implements InputProce
     
     @Override
     public void update(float deltaTime) {
+        
         Entity touchedEntity = null;
         
         // we only need to get the entity once - because the mouse is at the same position
