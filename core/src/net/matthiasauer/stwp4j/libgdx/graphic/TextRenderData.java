@@ -7,6 +7,7 @@ public class TextRenderData extends RenderData {
     private String textFont;
 
     public void set(
+            String id,
             float positionX,
             float positionY,
             float rotation,
@@ -16,7 +17,7 @@ public class TextRenderData extends RenderData {
             boolean renderProjected,
             String textString,
             String textFont) {
-        this.set(positionX, positionY, rotation, renderPositionUnit, tint, renderOrder, renderProjected);
+        this.set(id, positionX, positionY, rotation, renderPositionUnit, tint, renderOrder, renderProjected);
         this.textString = textString;
         this.textFont = textFont;
     }

@@ -6,6 +6,7 @@ public class SpriteRenderData extends RenderData {
     private String textureName;
 
     public void set(
+            String id,
             float positionX,
             float positionY,
             float rotation,
@@ -14,7 +15,7 @@ public class SpriteRenderData extends RenderData {
             int renderOrder,
             boolean renderProjected,
             String textureName) {
-        this.set(positionX, positionY, rotation, renderPositionUnit, tint, renderOrder, renderProjected);
+        this.set(id, positionX, positionY, rotation, renderPositionUnit, tint, renderOrder, renderProjected);
         this.textureName = textureName;
     }
     

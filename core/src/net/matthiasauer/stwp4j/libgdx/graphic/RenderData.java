@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class RenderData {
+    private String id;
     private final Vector2 position = new Vector2();
     private float rotation;
     private RenderPositionUnit renderPositionUnit;
@@ -12,6 +13,7 @@ public abstract class RenderData {
     private boolean renderProjected;
     
     protected void set(
+            String id,
             float positionX,
             float positionY,
             float rotation,
@@ -25,6 +27,10 @@ public abstract class RenderData {
         this.tint = tint;
         this.renderOrder = renderOrder;
         this.renderProjected = renderProjected;
+    }
+    
+    public String getId() {
+        return this.id;
     }
 
     public Vector2 getPosition() {

@@ -137,6 +137,8 @@ class RenderTextSubSystem {
         		        actualPositionY - glyphLayout.height,
         		        glyphLayout.width,
         		        glyphLayout.height,
-        		        this.camera.zoom));
+        		        this.camera.zoom,
+        		        data,
+        		        null));
 	}
 }

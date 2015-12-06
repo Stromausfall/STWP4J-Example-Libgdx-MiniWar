@@ -76,7 +76,9 @@ class RenderSpriteSubSystem {
         				actualPositionY,
         				texture.getRegionWidth(),
         				texture.getRegionHeight(),
-        				this.camera.zoom));
+        				this.camera.zoom,
+        				data,
+        				texture));
 	}
 
 }

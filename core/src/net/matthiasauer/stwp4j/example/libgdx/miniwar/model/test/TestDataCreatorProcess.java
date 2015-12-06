@@ -1,5 +1,7 @@
 package net.matthiasauer.stwp4j.example.libgdx.miniwar.model.test;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import net.matthiasauer.stwp4j.ChannelOutPort;
 import net.matthiasauer.stwp4j.ChannelPortsCreated;
 import net.matthiasauer.stwp4j.ChannelPortsRequest;
@@ -25,11 +27,13 @@ public class TestDataCreatorProcess extends LightweightProcess {
         this.startX = startX;
         this.startY = startY;
     }
+    
+    private final static AtomicInteger id = new AtomicInteger();
 
     @Override
     public ExecutionState execute() {
         SpriteRenderData data = new SpriteRenderData();
-        data.set(startX, startY, 0, RenderPositionUnit.Pixels, null, 1, true, "normalCity");
+        data.set("id" + id.incrementAndGet(), startX, startY, 0, RenderPositionUnit.Pixels, null, 1, true, "normalCity");
 
         this.renderDataChannel.offer(data);
         

@@ -5,6 +5,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -39,7 +40,7 @@ public class RenderProcess extends LightweightProcess {
     private ChannelInPort<ApplicationEvent> applicationEventChannel;
     private ChannelOutPort<RenderedData> renderedDataChannel;
     
-    public RenderProcess(List<String> atlasFilePaths) {
+    public RenderProcess(List<String> atlasFilePaths, OrthographicCamera camera, ScreenViewport viewport) {
         super(
                 new ChannelPortsRequest<RenderData>(
                         RENDERDATA_CHANNEL,
@@ -54,8 +55,8 @@ public class RenderProcess extends LightweightProcess {
                         PortType.OutputExclusive,
                         RenderedData.class));
 
-        this.camera = new OrthographicCamera(800, 600);
-        this.viewport = new ScreenViewport(this.camera);
+        this.camera = camera;
+        this.viewport = viewport;
         this.spriteBatch = new SpriteBatch();
         this.renderSpriteSubSystem =
                 new RenderSpriteSubSystem(
