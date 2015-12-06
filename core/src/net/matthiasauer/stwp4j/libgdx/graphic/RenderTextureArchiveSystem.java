@@ -11,6 +11,10 @@ public class RenderTextureArchiveSystem {
             new HashMap<Texture, Pixmap>();
 	
 	public Pixmap getPixmap(Texture texture) {
+	    if (!this.data.containsKey(texture)) {
+	        this.add(texture);
+	    }
+	    
 	    return this.data.get(texture);
 	}
 	

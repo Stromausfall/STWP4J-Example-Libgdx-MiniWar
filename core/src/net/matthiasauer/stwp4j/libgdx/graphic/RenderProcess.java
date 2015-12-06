@@ -5,7 +5,6 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -39,51 +38,38 @@ public class RenderProcess extends LightweightProcess {
     private ChannelInPort<RenderData> renderDataChannel;
     private ChannelInPort<ApplicationEvent> applicationEventChannel;
     private ChannelOutPort<RenderedData> renderedDataChannel;
-    
+
     public RenderProcess(List<String> atlasFilePaths, OrthographicCamera camera, ScreenViewport viewport) {
-        super(
-                new ChannelPortsRequest<RenderData>(
-                        RENDERDATA_CHANNEL,
-                        PortType.InputExclusive,
-                        RenderData.class),
-                new ChannelPortsRequest<ApplicationEvent>(
-                        ApplicationEntryPointProcess.APPLICATION_EVENT_CHANNEL,
-                        PortType.InputMultiplex,
-                        ApplicationEvent.class),
-                new ChannelPortsRequest<RenderedData>(
-                        InteractionProcess.RENDEREDDATA_CHANNEL,
-                        PortType.OutputExclusive,
+        super(new ChannelPortsRequest<RenderData>(RENDERDATA_CHANNEL, PortType.InputExclusive, RenderData.class),
+                new ChannelPortsRequest<ApplicationEvent>(ApplicationEntryPointProcess.APPLICATION_EVENT_CHANNEL,
+                        PortType.InputMultiplex, ApplicationEvent.class),
+                new ChannelPortsRequest<RenderedData>(InteractionProcess.RENDEREDDATA_CHANNEL, PortType.OutputExclusive,
                         RenderedData.class));
 
         this.camera = camera;
         this.viewport = viewport;
         this.spriteBatch = new SpriteBatch();
-        this.renderSpriteSubSystem =
-                new RenderSpriteSubSystem(
-                        new TextureLoader(atlasFilePaths),
-                        this.camera,
-                        this.spriteBatch);
-        this.renderTextSubSystem =
-                new RenderTextSubSystem(this.camera, this.spriteBatch);
+        this.renderSpriteSubSystem = new RenderSpriteSubSystem(new TextureLoader(atlasFilePaths), this.camera,
+                this.spriteBatch);
+        this.renderTextSubSystem = new RenderTextSubSystem(this.camera, this.spriteBatch);
 
-        // create the PriorityQueue with the custom comparator and an initial size
-        this.sortedRenderComponents =
-                new PriorityQueue<RenderData>(
-                        sortedRenderComponentsInitialSize,
-                        new RenderDataComparator());
+        // create the PriorityQueue with the custom comparator and an initial
+        // size
+        this.sortedRenderComponents = new PriorityQueue<RenderData>(sortedRenderComponentsInitialSize,
+                new RenderDataComparator());
     }
-    
+
     private void handleRenderDataChannel() {
         RenderData data = null;
-        
+
         while ((data = this.renderDataChannel.poll()) != null) {
             this.sortedRenderComponents.add(data);
         }
     }
-    
+
     private void handleApplicationEventChannel() {
         ApplicationEvent event = null;
-        
+
         while ((event = this.applicationEventChannel.poll()) != null) {
             if (event.getApplicationEventType() == ApplicationEventType.RESIZE) {
                 ResizeApplicationEvent resizeEvent = (ResizeApplicationEvent) event;
@@ -104,12 +90,11 @@ public class RenderProcess extends LightweightProcess {
 
     @Override
     protected void initialize(ChannelPortsCreated createdChannelPorts) {
-        this.renderDataChannel =
-                createdChannelPorts.getChannelInPort(RENDERDATA_CHANNEL, RenderData.class);
-        this.applicationEventChannel =
-                createdChannelPorts.getChannelInPort(ApplicationEntryPointProcess.APPLICATION_EVENT_CHANNEL, ApplicationEvent.class);
-        this.renderedDataChannel =
-                createdChannelPorts.getChannelOutPort(InteractionProcess.RENDEREDDATA_CHANNEL, RenderedData.class);
+        this.renderDataChannel = createdChannelPorts.getChannelInPort(RENDERDATA_CHANNEL, RenderData.class);
+        this.applicationEventChannel = createdChannelPorts
+                .getChannelInPort(ApplicationEntryPointProcess.APPLICATION_EVENT_CHANNEL, ApplicationEvent.class);
+        this.renderedDataChannel = createdChannelPorts.getChannelOutPort(InteractionProcess.RENDEREDDATA_CHANNEL,
+                RenderedData.class);
     }
 
     @Override

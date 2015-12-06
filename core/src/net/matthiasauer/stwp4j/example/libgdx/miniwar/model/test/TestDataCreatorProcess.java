@@ -16,6 +16,7 @@ public class TestDataCreatorProcess extends LightweightProcess {
     private ChannelOutPort<RenderData> renderDataChannel;
     private final int startX;
     private final int startY;
+    private final String renderId;
 
     public TestDataCreatorProcess(int startX, int startY) {
         super(
@@ -26,6 +27,7 @@ public class TestDataCreatorProcess extends LightweightProcess {
         
         this.startX = startX;
         this.startY = startY;
+        this.renderId = "id" + id.incrementAndGet();
     }
     
     private final static AtomicInteger id = new AtomicInteger();
@@ -33,7 +35,7 @@ public class TestDataCreatorProcess extends LightweightProcess {
     @Override
     public ExecutionState execute() {
         SpriteRenderData data = new SpriteRenderData();
-        data.set("id" + id.incrementAndGet(), startX, startY, 0, RenderPositionUnit.Pixels, null, 1, true, "normalCity");
+        data.set(this.renderId, startX, startY, 0, RenderPositionUnit.Pixels, null, 1, true, "normalCity");
 
         this.renderDataChannel.offer(data);
         

@@ -64,8 +64,9 @@ public class InteractionProcess extends LightweightProcess implements InputProce
             // System.err.println("event - " + eventToProcess.inputType + " @
             // x/y:" + eventToProcess.screenX + "/" + eventToProcess.screenY + "
             // on entity : " + touchedEntity);
-            System.err.println("event - " + " @ x/y:" + eventToProcess.getPosition(true) + " - "
-                    + eventToProcess.getPosition(false) + " on entity : " + touchedEntity);
+            if (touchedEntity != null) {
+                System.err.println("event - " + eventToProcess.getInputTouchEventType() + "(" + eventToProcess.getArgument() + ") on entity : " + touchedEntity);
+            }
 
             // eventToProcess.target = touchedEntity;
             Pools.get(InputTouchEventData.class).free(eventToProcess);

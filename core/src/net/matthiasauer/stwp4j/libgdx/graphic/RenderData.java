@@ -27,6 +27,7 @@ public abstract class RenderData {
         this.tint = tint;
         this.renderOrder = renderOrder;
         this.renderProjected = renderProjected;
+        this.id = id;
     }
     
     public String getId() {
