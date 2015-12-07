@@ -21,6 +21,7 @@ allprojects {
         gdxVersion = '1.7.1'
         roboVMVersion = '1.9.0'
 		stwp4jVersion = '0.0.1.4'
+		stwp4jLibgdxToolsVersion = '0.0.0.1'
     }
 
     repositories {
@@ -81,6 +82,7 @@ project(":html") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
         compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
 		compile "com.github.Stromausfall:stwp4j:$stwp4jVersion:sources"
+		compile "com.github.Stromausfall:stwp4j-libgdx-tools:$stwp4jLibgdxToolsVersion:sources"
     }
 }
 
@@ -103,6 +105,7 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
 		compile "com.github.Stromausfall:stwp4j:$stwp4jVersion"
+		compile "com.github.Stromausfall:stwp4j-libgdx-tools:$stwp4jLibgdxToolsVersion"
         compile group: 'junit', name: 'junit', version: '4.+'
         compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
         compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
