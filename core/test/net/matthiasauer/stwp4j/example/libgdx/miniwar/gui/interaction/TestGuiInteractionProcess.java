@@ -7,12 +7,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.Test;
 
-import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pools;
 
 import net.matthiasauer.stwp4j.ExecutionState;
 import net.matthiasauer.stwp4j.Scheduler;
-import net.matthiasauer.stwp4j.example.libgdx.miniwar.test.Utils;
 import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventData;
 import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventType;
 
@@ -20,65 +19,60 @@ public class TestGuiInteractionProcess {
 
     @Test
     public void test() {
-        final AtomicReference<String> messageToFail = new AtomicReference<String>(null) ;
+        final AtomicReference<String> messageToFail = new AtomicReference<String>(null);
         final AtomicBoolean receivedCorrectEvent = new AtomicBoolean(false);
-        final Camera camera = Utils.createDummyCamera();
-        
+
         Scheduler testScheduler = new Scheduler();
-        
+
         // the process we want to test
         testScheduler.addProcess(new GuiInteractionProcess());
-        
-        // initialize the graphics
-        Utils.initializeDummyGraphics();
-        
+
         // this implements the test logic !
-        testScheduler.addProcess(
-                new TestProcess() {
-                    @Override
-                    protected ExecutionState execute() {
-                        if (iteration == 0) {
-                            // first send the events that should trigger a ClickEvent !
-                            InputTouchEventData event1 =
-                                    Pools.get(InputTouchEventData.class).obtain()
-                                            .set(0, 0, InputTouchEventType.TouchDown, 0, camera);
-                            InputTouchEventData event2 =
-                                    Pools.get(InputTouchEventData.class).obtain()
-                                            .set(0, 0, InputTouchEventType.TouchUp, 0, camera);
-                            
-                            event1.setTouchedRenderDataId(ENTITY_ID);
-                            event2.setTouchedRenderDataId(ENTITY_ID);
-                            
-                            this.inputTouchEventDataChannel.offer(event1);
-                            this.inputTouchEventDataChannel.offer(event2);
+        testScheduler.addProcess(new TestProcess() {
+            @Override
+            protected ExecutionState execute() {
+                if (iteration == 0) {
+                    Vector2 v = new Vector2();
+
+                    // first send the events that should trigger a ClickEvent !
+                    InputTouchEventData event1 = Pools.get(InputTouchEventData.class).obtain()
+                            .set(InputTouchEventType.TouchDown, 0, v, v);
+                    InputTouchEventData event2 = Pools.get(InputTouchEventData.class).obtain()
+                            .set(InputTouchEventType.TouchUp, 0, v, v);
+
+                    event1.setTouchedRenderDataId(ENTITY_ID);
+                    event2.setTouchedRenderDataId(ENTITY_ID);
+
+                    this.inputTouchEventDataChannel.offer(event1);
+                    this.inputTouchEventDataChannel.offer(event2);
+                }
+
+                if (iteration == 1) {
+                    // expected the clicked event !
+                    ClickEvent clickEvent = this.clickEventChannel.poll();
+
+                    if (clickEvent == null) {
+                        messageToFail.set("no event generated !");
+                    } else {
+                        if (clickEvent.getId().equals(ENTITY_ID)) {
+                            receivedCorrectEvent.set(true);
                         }
-                        
-                        if (iteration == 1) {
-                            // expected the clicked event !
-                            ClickEvent clickEvent = this.clickEventChannel.poll();
-                            
-                            if (clickEvent == null) {
-                                messageToFail.set("no event generated !");
-                            } else {
-                                if (clickEvent.getId().equals(ENTITY_ID)) {
-                                    receivedCorrectEvent.set(true);
-                                }
-                            }
-                        }
-                        
-                        this.iteration += 1;
-                    
-                        return ExecutionState.Finished;
                     }
-                });
-        
+                }
+
+                this.iteration += 1;
+
+                return ExecutionState.Finished;
+            }
+        });
+
         testScheduler.performIteration();
         testScheduler.performIteration();
-        
+
         if (messageToFail.get() != null) {
             fail(messageToFail.get());
         }
-        
+
         if (receivedCorrectEvent.get() == false) {
             fail("did'nt receive correct event !");
         }

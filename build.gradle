@@ -21,7 +21,7 @@ allprojects {
         gdxVersion = '1.7.1'
         roboVMVersion = '1.9.0'
 		stwp4jVersion = '0.0.1.4'
-		stwp4jLibgdxToolsVersion = '0.0.0.3'
+		stwp4jLibgdxToolsVersion = '0.0.0.5'
     }
 
     repositories {
