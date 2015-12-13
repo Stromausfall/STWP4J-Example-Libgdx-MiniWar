@@ -4,7 +4,7 @@ sourceCompatibility = '1.7'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 ext {
-	mainClassName = "net.matthiasauer.stwp4j.example.libgdx.miniwar.IOSLauncher"
+	mainClassName = "net.matthiasauer.stwp4j.libgdx.miniwar.IOSLauncher"
 }
 
 launchIPhoneSimulator.dependsOn build

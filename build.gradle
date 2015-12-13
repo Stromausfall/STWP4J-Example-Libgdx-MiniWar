@@ -101,7 +101,7 @@ project(":core") {
             }
         }
     }
-
+    
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
 		compile "com.github.Stromausfall:stwp4j:$stwp4jVersion"
