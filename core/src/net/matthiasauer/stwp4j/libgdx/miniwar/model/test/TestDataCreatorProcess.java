@@ -1,7 +1,5 @@
 package net.matthiasauer.stwp4j.libgdx.miniwar.model.test;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import net.matthiasauer.stwp4j.ChannelOutPort;
 import net.matthiasauer.stwp4j.ChannelPortsCreated;
 import net.matthiasauer.stwp4j.ChannelPortsRequest;
@@ -27,10 +25,10 @@ public class TestDataCreatorProcess extends LightweightProcess {
         
         this.startX = startX;
         this.startY = startY;
-        this.renderId = "id" + id.incrementAndGet();
+        this.renderId = "id" + (id++);
     }
     
-    private final static AtomicInteger id = new AtomicInteger();
+    private static int id = 0;
 
     @Override
     public ExecutionState execute() {
