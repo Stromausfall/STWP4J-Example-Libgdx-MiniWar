@@ -18,7 +18,7 @@ import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventType;
 public class TestGuiInteractionProcess {
 
     @Test
-    public void test() {
+    public void testClickIsGenerated() {
         final AtomicReference<String> messageToFail = new AtomicReference<String>(null);
         final AtomicBoolean receivedCorrectEvent = new AtomicBoolean(false);
 
@@ -29,6 +29,8 @@ public class TestGuiInteractionProcess {
 
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess() {
+            int iteration = 0;
+            
             @Override
             protected ExecutionState execute() {
                 if (iteration == 0) {
@@ -62,11 +64,10 @@ public class TestGuiInteractionProcess {
 
                 this.iteration += 1;
 
-                return ExecutionState.Finished;
+                return ExecutionState.Waiting;
             }
         });
 
-        testScheduler.performIteration();
         testScheduler.performIteration();
 
         if (messageToFail.get() != null) {

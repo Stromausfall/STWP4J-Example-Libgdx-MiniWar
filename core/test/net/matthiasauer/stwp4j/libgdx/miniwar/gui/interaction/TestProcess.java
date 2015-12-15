@@ -22,7 +22,6 @@ abstract class TestProcess extends LightweightProcess {
 
     ChannelInPort<ClickEvent> clickEventChannel;
     ChannelOutPort<InputTouchEventData> inputTouchEventDataChannel;
-    int iteration = 0;
 
     @Override
     protected void initialize(ChannelPortsCreated createdChannelPorts) {
