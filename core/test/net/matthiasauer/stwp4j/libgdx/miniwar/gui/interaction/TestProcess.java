@@ -4,7 +4,6 @@ import net.matthiasauer.stwp4j.ChannelInPort;
 import net.matthiasauer.stwp4j.ChannelOutPort;
 import net.matthiasauer.stwp4j.ChannelPortsCreated;
 import net.matthiasauer.stwp4j.ChannelPortsRequest;
-import net.matthiasauer.stwp4j.ExecutionState;
 import net.matthiasauer.stwp4j.LightweightProcess;
 import net.matthiasauer.stwp4j.PortType;
 import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventData;
@@ -32,5 +31,5 @@ abstract class TestProcess extends LightweightProcess {
     }
 
     @Override
-    protected abstract ExecutionState execute();
+    protected abstract void execute();
 }

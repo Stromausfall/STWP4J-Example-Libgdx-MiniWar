@@ -10,7 +10,6 @@ import org.junit.Test;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pools;
 
-import net.matthiasauer.stwp4j.ExecutionState;
 import net.matthiasauer.stwp4j.Scheduler;
 import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventData;
 import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventType;
@@ -32,7 +31,7 @@ public class TestGuiInteractionProcess {
             int iteration = 0;
             
             @Override
-            protected ExecutionState execute() {
+            protected void execute() {
                 if (iteration == 0) {
                     Vector2 v = new Vector2();
 
@@ -63,8 +62,8 @@ public class TestGuiInteractionProcess {
                 }
 
                 this.iteration += 1;
-
-                return ExecutionState.Waiting;
+                
+                while (this.clickEventChannel.poll() != null);
             }
         });
 

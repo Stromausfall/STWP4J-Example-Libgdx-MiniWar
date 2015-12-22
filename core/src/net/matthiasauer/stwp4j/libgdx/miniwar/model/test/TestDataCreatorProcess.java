@@ -3,7 +3,6 @@ package net.matthiasauer.stwp4j.libgdx.miniwar.model.test;
 import net.matthiasauer.stwp4j.ChannelOutPort;
 import net.matthiasauer.stwp4j.ChannelPortsCreated;
 import net.matthiasauer.stwp4j.ChannelPortsRequest;
-import net.matthiasauer.stwp4j.ExecutionState;
 import net.matthiasauer.stwp4j.LightweightProcess;
 import net.matthiasauer.stwp4j.PortType;
 import net.matthiasauer.stwp4j.libgdx.graphic.RenderData;
@@ -29,15 +28,17 @@ public class TestDataCreatorProcess extends LightweightProcess {
     }
     
     private static int id = 0;
-
+    
     @Override
-    public ExecutionState execute() {
+    protected void preIteration() {
         SpriteRenderData data = new SpriteRenderData();
         data.set(this.renderId, startX, startY, 0, RenderPositionUnit.Pixels, null, 1, true, "normalCity");
 
         this.renderDataChannel.offer(data);
-        
-        return ExecutionState.Finished;
+    }
+
+    @Override
+    public void execute() {
     }
 
     @Override
