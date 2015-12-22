@@ -20,8 +20,8 @@ allprojects {
         appName = "STWP4J-Libgdx-Tools-Example-MiniWar"
         gdxVersion = '1.7.1'
         roboVMVersion = '1.9.0'
-		stwp4jVersion = '0.0.1.8'
-		stwp4jLibgdxToolsVersion = '0.0.0.9'
+		stwp4jVersion = '0.0.1.9'
+		stwp4jLibgdxToolsVersion = '0.0.1.0'
     }
 
     repositories {
