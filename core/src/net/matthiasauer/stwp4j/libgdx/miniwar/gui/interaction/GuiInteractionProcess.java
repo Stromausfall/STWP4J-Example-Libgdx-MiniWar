@@ -31,11 +31,14 @@ public class GuiInteractionProcess extends LightweightProcess {
         while ((data = this.inputTouchEventDataChannel.poll()) != null) {
             System.err.println("oi oi > " + (bla++) + " - " + (data == null));
 
-            if (data != null) {
-                ClickEvent clickEvent = Pools.get(ClickEvent.class).obtain();
-                clickEvent.set(data.getTouchedRenderDataId());
-
-                this.clickEventChannel.offer(clickEvent);
+            // every two received events - create a new event...
+            if ((bla % 2) == 0) {
+                if (data != null) {
+                    ClickEvent clickEvent = Pools.get(ClickEvent.class).obtain();
+                    clickEvent.set(data.getTouchedRenderDataId());
+    
+                    this.clickEventChannel.offer(clickEvent);
+                }
             }
         }
     }

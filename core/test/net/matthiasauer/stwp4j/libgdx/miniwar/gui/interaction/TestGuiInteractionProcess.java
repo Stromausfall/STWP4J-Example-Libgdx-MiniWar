@@ -48,7 +48,7 @@ public class TestGuiInteractionProcess {
                     this.inputTouchEventDataChannel.offer(event2);
                 }
 
-                if (iteration == 1) {
+                if (iteration == 2) {
                     // expected the clicked event !
                     ClickEvent clickEvent = this.clickEventChannel.poll();
 
@@ -62,8 +62,6 @@ public class TestGuiInteractionProcess {
                 }
 
                 this.iteration += 1;
-                
-                while (this.clickEventChannel.poll() != null);
             }
         });
 
