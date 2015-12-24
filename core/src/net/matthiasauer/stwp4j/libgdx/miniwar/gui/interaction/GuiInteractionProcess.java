@@ -30,7 +30,8 @@ public class GuiInteractionProcess extends LightweightProcess {
         InputTouchEventData data = null;
 
         while ((data = this.inputTouchEventDataChannel.poll()) != null) {
-            // if we have another TouchDown - remove the process we made until now
+            // if we have another TouchDown - remove the process we made until
+            // now
             if (this.lastEvent != null) {
                 if (data.getInputTouchEventType() == InputTouchEventType.TouchDown) {
                     this.lastEvent = null;
@@ -46,15 +47,15 @@ public class GuiInteractionProcess extends LightweightProcess {
                 if (data.getInputTouchEventType() == InputTouchEventType.TouchUp) {
                     final String lastId = this.lastEvent.getTouchedRenderDataId();
                     final String currentId = data.getTouchedRenderDataId();
-                    
+
                     // only if both entities have the same id !
                     if (lastId.equalsIgnoreCase(currentId)) {
                         ClickEvent clickEvent = Pools.get(ClickEvent.class).obtain();
                         clickEvent.set(data.getTouchedRenderDataId());
-        
+
                         this.clickEventChannel.offer(clickEvent);
                     }
-                    
+
                     // reset !
                     this.lastEvent = null;
                 }

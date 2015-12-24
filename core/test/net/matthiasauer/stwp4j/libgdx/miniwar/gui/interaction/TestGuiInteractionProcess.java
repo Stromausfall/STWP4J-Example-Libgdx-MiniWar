@@ -10,7 +10,6 @@ import org.junit.Test;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pools;
 
-import net.matthiasauer.stwp4j.ChannelInPort;
 import net.matthiasauer.stwp4j.ChannelOutPort;
 import net.matthiasauer.stwp4j.Scheduler;
 import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventData;
@@ -18,7 +17,8 @@ import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventType;
 
 public class TestGuiInteractionProcess {
 
-    private void expectCorrectEvent(ClickEvent clickEvent, AtomicReference<String> messageToFail, AtomicBoolean receivedCorrectEvent, String entityID) {
+    private void expectCorrectEvent(ClickEvent clickEvent, AtomicReference<String> messageToFail,
+            AtomicBoolean receivedCorrectEvent, String entityID) {
         if (clickEvent == null) {
             messageToFail.set("no event generated !");
         } else {
@@ -27,18 +27,18 @@ public class TestGuiInteractionProcess {
             }
         }
     }
-    
-    private void sendEvent(ChannelOutPort<InputTouchEventData> inputTouchEventDataChannel, String entityId, InputTouchEventType type) {
+
+    private void sendEvent(ChannelOutPort<InputTouchEventData> inputTouchEventDataChannel, String entityId,
+            InputTouchEventType type) {
         Vector2 v = new Vector2();
 
-        InputTouchEventData event = Pools.get(InputTouchEventData.class).obtain()
-                .set(type, 0, v, v);
+        InputTouchEventData event = Pools.get(InputTouchEventData.class).obtain().set(type, 0, v, v);
 
         event.setTouchedRenderDataId(entityId);
 
         inputTouchEventDataChannel.offer(event);
     }
-    
+
     @Test
     public void testClickIsGeneratedFirstDownThenUp() {
         final AtomicReference<String> messageToFail = new AtomicReference<String>(null);
@@ -52,7 +52,7 @@ public class TestGuiInteractionProcess {
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess() {
             int iteration = 0;
-            
+
             @Override
             protected void execute() {
                 if (iteration == 0) {
@@ -79,7 +79,7 @@ public class TestGuiInteractionProcess {
             fail("did'nt receive correct event !");
         }
     }
-    
+
     @Test
     public void testClickIsNotGeneratedFirstDownThenDown() {
         final AtomicReference<String> messageToFail = new AtomicReference<String>(null);
@@ -92,7 +92,7 @@ public class TestGuiInteractionProcess {
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess() {
             int iteration = 0;
-            
+
             @Override
             protected void execute() {
                 if (iteration == 0) {
@@ -119,7 +119,7 @@ public class TestGuiInteractionProcess {
             fail(messageToFail.get());
         }
     }
-    
+
     @Test
     public void testClickIsNotGeneratedFirstUpThenUp() {
         final AtomicReference<String> messageToFail = new AtomicReference<String>(null);
@@ -132,7 +132,7 @@ public class TestGuiInteractionProcess {
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess() {
             int iteration = 0;
-            
+
             @Override
             protected void execute() {
                 if (iteration == 0) {
@@ -159,7 +159,7 @@ public class TestGuiInteractionProcess {
             fail(messageToFail.get());
         }
     }
-    
+
     @Test
     public void testClickIsNotGeneratedTwiceFirstDownThenUpThenUp() {
         final AtomicReference<String> messageToFail = new AtomicReference<String>(null);
@@ -173,7 +173,7 @@ public class TestGuiInteractionProcess {
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess() {
             int iteration = 0;
-            
+
             @Override
             protected void execute() {
                 if (iteration == 0) {
@@ -206,7 +206,7 @@ public class TestGuiInteractionProcess {
             fail("did'nt receive correct event !");
         }
     }
-    
+
     @Test
     public void testClickIsNotGeneratedDifferentIds() {
         final AtomicReference<String> messageToFail = new AtomicReference<String>(null);
@@ -219,7 +219,7 @@ public class TestGuiInteractionProcess {
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess() {
             int iteration = 0;
-            
+
             @Override
             protected void execute() {
                 if (iteration == 0) {
@@ -246,7 +246,7 @@ public class TestGuiInteractionProcess {
             fail(messageToFail.get());
         }
     }
-    
+
     @Test
     public void testClickIsNotGeneratedIfFirstDifferentIdsButThenSame() {
         final AtomicReference<String> messageToFail = new AtomicReference<String>(null);
@@ -259,7 +259,7 @@ public class TestGuiInteractionProcess {
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess() {
             int iteration = 0;
-            
+
             @Override
             protected void execute() {
                 if (iteration == 0) {
@@ -287,12 +287,12 @@ public class TestGuiInteractionProcess {
             fail(messageToFail.get());
         }
     }
-    
+
     @Test
     public void testClickIsGeneratedIfFirstDifferentIdsButThenSame() {
         final AtomicReference<String> messageToFail = new AtomicReference<String>(null);
         final AtomicBoolean receivedCorrectEvent = new AtomicBoolean(false);
-        
+
         Scheduler testScheduler = new Scheduler();
 
         // the process we want to test
@@ -301,7 +301,7 @@ public class TestGuiInteractionProcess {
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess() {
             int iteration = 0;
-            
+
             @Override
             protected void execute() {
                 if (iteration == 0) {
