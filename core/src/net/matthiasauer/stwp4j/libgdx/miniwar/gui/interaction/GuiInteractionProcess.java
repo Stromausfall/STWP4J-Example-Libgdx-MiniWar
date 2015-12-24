@@ -9,6 +9,7 @@ import net.matthiasauer.stwp4j.ChannelPortsRequest;
 import net.matthiasauer.stwp4j.LightweightProcess;
 import net.matthiasauer.stwp4j.PortType;
 import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventData;
+import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventType;
 import net.matthiasauer.stwp4j.libgdx.graphic.RenderProcess;
 
 public class GuiInteractionProcess extends LightweightProcess {
@@ -22,22 +23,40 @@ public class GuiInteractionProcess extends LightweightProcess {
                 new ChannelPortsRequest<ClickEvent>(CLICKEVENT_CHANNEL, PortType.OutputExclusive, ClickEvent.class));
     }
 
-    int bla = 0;
+    private InputTouchEventData lastEvent = null;
 
     @Override
     protected void execute() {
         InputTouchEventData data = null;
 
         while ((data = this.inputTouchEventDataChannel.poll()) != null) {
-            System.err.println("oi oi > " + (bla++) + " - " + (data == null));
+            // if we have another TouchDown - remove the process we made until now
+            if (this.lastEvent != null) {
+                if (data.getInputTouchEventType() == InputTouchEventType.TouchDown) {
+                    this.lastEvent = null;
+                }
+            }
 
-            // every two received events - create a new event...
-            if ((bla % 2) == 0) {
-                if (data != null) {
-                    ClickEvent clickEvent = Pools.get(ClickEvent.class).obtain();
-                    clickEvent.set(data.getTouchedRenderDataId());
-    
-                    this.clickEventChannel.offer(clickEvent);
+            // only take it if it is a DOWN event !
+            if (this.lastEvent == null) {
+                if (data.getInputTouchEventType() == InputTouchEventType.TouchDown) {
+                    this.lastEvent = data;
+                }
+            } else {
+                if (data.getInputTouchEventType() == InputTouchEventType.TouchUp) {
+                    final String lastId = this.lastEvent.getTouchedRenderDataId();
+                    final String currentId = data.getTouchedRenderDataId();
+                    
+                    // only if both entities have the same id !
+                    if (lastId.equalsIgnoreCase(currentId)) {
+                        ClickEvent clickEvent = Pools.get(ClickEvent.class).obtain();
+                        clickEvent.set(data.getTouchedRenderDataId());
+        
+                        this.clickEventChannel.offer(clickEvent);
+                    }
+                    
+                    // reset !
+                    this.lastEvent = null;
                 }
             }
         }
