@@ -3,23 +3,22 @@ package net.matthiasauer.stwp4j.libgdx.miniwar.model.test;
 import com.badlogic.gdx.utils.Pools;
 
 import net.matthiasauer.stwp4j.ChannelInPort;
-import net.matthiasauer.stwp4j.ChannelPortsCreated;
-import net.matthiasauer.stwp4j.ChannelPortsRequest;
 import net.matthiasauer.stwp4j.LightweightProcess;
-import net.matthiasauer.stwp4j.PortType;
 import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventData;
-import net.matthiasauer.stwp4j.libgdx.graphic.RenderProcess;
 
 public class TestDataConsumerProcess extends LightweightProcess {
-    private ChannelInPort<InputTouchEventData> inputChannel;
+    private final ChannelInPort<InputTouchEventData> inputChannel;
 
-    public TestDataConsumerProcess() {
-        super(new ChannelPortsRequest<InputTouchEventData>(RenderProcess.INPUTTOUCHEVENTDATA_CHANNEL,
-                PortType.InputExclusive, InputTouchEventData.class));
+    public TestDataConsumerProcess(ChannelInPort<InputTouchEventData> inputChannel) {
+        this.inputChannel = inputChannel;
     }
 
     @Override
     protected void preIteration() {
+    }
+
+    @Override
+    protected void execute() {
         InputTouchEventData data = null;
 
         while ((data = this.inputChannel.poll()) != null) {
@@ -30,15 +29,4 @@ public class TestDataConsumerProcess extends LightweightProcess {
             Pools.get(InputTouchEventData.class).free(data);
         }
     }
-    
-    @Override
-    protected void execute() {
-    }
-
-    @Override
-    protected void initialize(ChannelPortsCreated createdChannelPorts) {
-        this.inputChannel = createdChannelPorts.getChannelInPort(RenderProcess.INPUTTOUCHEVENTDATA_CHANNEL,
-                InputTouchEventData.class);
-    }
-
 }

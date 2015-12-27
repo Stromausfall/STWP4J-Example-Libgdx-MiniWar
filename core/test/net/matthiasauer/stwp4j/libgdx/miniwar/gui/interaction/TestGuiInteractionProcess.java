@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pools;
 
+import net.matthiasauer.stwp4j.Channel;
 import net.matthiasauer.stwp4j.ChannelOutPort;
 import net.matthiasauer.stwp4j.Scheduler;
 import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventData;
@@ -45,12 +46,14 @@ public class TestGuiInteractionProcess {
         final AtomicBoolean receivedCorrectEvent = new AtomicBoolean(false);
 
         Scheduler testScheduler = new Scheduler();
+        Channel<InputTouchEventData> inputTouchEventDataChan = testScheduler.createMultiplexChannel("input touch test chan",  InputTouchEventData.class);
+        Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
 
         // the process we want to test
-        testScheduler.addProcess(new GuiInteractionProcess());
+        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
 
         // this implements the test logic !
-        testScheduler.addProcess(new TestProcess() {
+        testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
             int iteration = 0;
 
             @Override
@@ -85,12 +88,14 @@ public class TestGuiInteractionProcess {
         final AtomicReference<String> messageToFail = new AtomicReference<String>(null);
 
         Scheduler testScheduler = new Scheduler();
+        Channel<InputTouchEventData> inputTouchEventDataChan = testScheduler.createMultiplexChannel("input touch test chan",  InputTouchEventData.class);
+        Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
 
         // the process we want to test
-        testScheduler.addProcess(new GuiInteractionProcess());
+        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
 
         // this implements the test logic !
-        testScheduler.addProcess(new TestProcess() {
+        testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
             int iteration = 0;
 
             @Override
@@ -125,12 +130,14 @@ public class TestGuiInteractionProcess {
         final AtomicReference<String> messageToFail = new AtomicReference<String>(null);
 
         Scheduler testScheduler = new Scheduler();
+        Channel<InputTouchEventData> inputTouchEventDataChan = testScheduler.createMultiplexChannel("input touch test chan",  InputTouchEventData.class);
+        Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
 
         // the process we want to test
-        testScheduler.addProcess(new GuiInteractionProcess());
+        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
 
         // this implements the test logic !
-        testScheduler.addProcess(new TestProcess() {
+        testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
             int iteration = 0;
 
             @Override
@@ -166,12 +173,14 @@ public class TestGuiInteractionProcess {
         final AtomicBoolean receivedCorrectEvent = new AtomicBoolean(false);
 
         Scheduler testScheduler = new Scheduler();
+        Channel<InputTouchEventData> inputTouchEventDataChan = testScheduler.createMultiplexChannel("input touch test chan",  InputTouchEventData.class);
+        Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
 
         // the process we want to test
-        testScheduler.addProcess(new GuiInteractionProcess());
+        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
 
         // this implements the test logic !
-        testScheduler.addProcess(new TestProcess() {
+        testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
             int iteration = 0;
 
             @Override
@@ -212,12 +221,14 @@ public class TestGuiInteractionProcess {
         final AtomicReference<String> messageToFail = new AtomicReference<String>(null);
 
         Scheduler testScheduler = new Scheduler();
+        Channel<InputTouchEventData> inputTouchEventDataChan = testScheduler.createMultiplexChannel("input touch test chan",  InputTouchEventData.class);
+        Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
 
         // the process we want to test
-        testScheduler.addProcess(new GuiInteractionProcess());
+        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
 
         // this implements the test logic !
-        testScheduler.addProcess(new TestProcess() {
+        testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
             int iteration = 0;
 
             @Override
@@ -252,12 +263,14 @@ public class TestGuiInteractionProcess {
         final AtomicReference<String> messageToFail = new AtomicReference<String>(null);
 
         Scheduler testScheduler = new Scheduler();
+        Channel<InputTouchEventData> inputTouchEventDataChan = testScheduler.createMultiplexChannel("input touch test chan",  InputTouchEventData.class);
+        Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
 
         // the process we want to test
-        testScheduler.addProcess(new GuiInteractionProcess());
+        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
 
         // this implements the test logic !
-        testScheduler.addProcess(new TestProcess() {
+        testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
             int iteration = 0;
 
             @Override
@@ -294,12 +307,14 @@ public class TestGuiInteractionProcess {
         final AtomicBoolean receivedCorrectEvent = new AtomicBoolean(false);
 
         Scheduler testScheduler = new Scheduler();
+        Channel<InputTouchEventData> inputTouchEventDataChan = testScheduler.createMultiplexChannel("input touch test chan",  InputTouchEventData.class);
+        Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
 
         // the process we want to test
-        testScheduler.addProcess(new GuiInteractionProcess());
+        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
 
         // this implements the test logic !
-        testScheduler.addProcess(new TestProcess() {
+        testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
             int iteration = 0;
 
             @Override
