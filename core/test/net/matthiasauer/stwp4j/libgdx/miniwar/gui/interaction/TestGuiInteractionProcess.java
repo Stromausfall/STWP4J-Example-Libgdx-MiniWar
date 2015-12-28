@@ -344,4 +344,89 @@ public class TestGuiInteractionProcess {
             fail("did'nt receive correct event !");
         }
     }
+
+    @Test
+    public void testClickIsNotGeneratedIfOneFirstIdIsNull() {
+        final AtomicReference<String> messageToFail = new AtomicReference<String>(null);
+
+        Scheduler testScheduler = new Scheduler();
+        Channel<InputTouchEventData> inputTouchEventDataChan = testScheduler.createMultiplexChannel("input touch test chan",  InputTouchEventData.class);
+        Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
+
+        // the process we want to test
+        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
+
+        // this implements the test logic !
+        testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
+            int iteration = 0;
+
+            @Override
+            protected void execute() {
+                if (iteration == 0) {
+                    sendEvent(inputTouchEventDataChannel, null, InputTouchEventType.TouchDown);
+                    sendEvent(inputTouchEventDataChannel, ENTITY_ID, InputTouchEventType.TouchUp);
+                }
+
+                if (iteration == 2) {
+                    ClickEvent clickEvent = this.clickEventChannel.poll();
+
+                    // DON'T expect the clicked event !
+                    if (clickEvent != null) {
+                        messageToFail.set("event generated !");
+                    }
+                }
+
+                this.iteration += 1;
+            }
+        });
+
+        testScheduler.performIteration();
+
+        if (messageToFail.get() != null) {
+            fail(messageToFail.get());
+        }
+    }
+
+    @Test
+    public void testClickIsNotGeneratedIfValidSequenceInterruptedByANullId() {
+        final AtomicReference<String> messageToFail = new AtomicReference<String>(null);
+
+        Scheduler testScheduler = new Scheduler();
+        Channel<InputTouchEventData> inputTouchEventDataChan = testScheduler.createMultiplexChannel("input touch test chan",  InputTouchEventData.class);
+        Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
+
+        // the process we want to test
+        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
+
+        // this implements the test logic !
+        testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
+            int iteration = 0;
+
+            @Override
+            protected void execute() {
+                if (iteration == 0) {
+                    sendEvent(inputTouchEventDataChannel, ENTITY_ID, InputTouchEventType.TouchDown);
+                    sendEvent(inputTouchEventDataChannel, null, InputTouchEventType.TouchDown);
+                    sendEvent(inputTouchEventDataChannel, ENTITY_ID, InputTouchEventType.TouchUp);
+                }
+
+                if (iteration == 2) {
+                    ClickEvent clickEvent = this.clickEventChannel.poll();
+
+                    // DON'T expect the clicked event !
+                    if (clickEvent != null) {
+                        messageToFail.set("event generated !");
+                    }
+                }
+
+                this.iteration += 1;
+            }
+        });
+
+        testScheduler.performIteration();
+
+        if (messageToFail.get() != null) {
+            fail(messageToFail.get());
+        }
+    }
 }

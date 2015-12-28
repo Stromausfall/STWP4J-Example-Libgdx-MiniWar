@@ -1,5 +1,6 @@
 package net.matthiasauer.stwp4j.libgdx.miniwar.gui.interaction;
 
+import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 
 import net.matthiasauer.stwp4j.ChannelInPort;
@@ -11,11 +12,15 @@ import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventType;
 public class GuiInteractionProcess extends LightweightProcess {
     private final ChannelInPort<InputTouchEventData> inputTouchEventDataChannel;
     private final ChannelOutPort<ClickEvent> clickEventChannel;
+    private final Pool<InputTouchEventData> inputTouchEventDataPool;
+    private final Pool<ClickEvent> clickEventPool;
 
     public GuiInteractionProcess(ChannelInPort<InputTouchEventData> inputTouchEventDataChannel,
             ChannelOutPort<ClickEvent> clickEventChannel) {
         this.inputTouchEventDataChannel = inputTouchEventDataChannel;
         this.clickEventChannel = clickEventChannel;
+        this.inputTouchEventDataPool = Pools.get(InputTouchEventData.class);
+        this.clickEventPool = Pools.get(ClickEvent.class);
     }
 
     private InputTouchEventData lastEvent = null;
@@ -25,6 +30,12 @@ public class GuiInteractionProcess extends LightweightProcess {
         InputTouchEventData data = null;
 
         while ((data = this.inputTouchEventDataChannel.poll()) != null) {
+            // we clicked somewhere other than an entity - remove all progress
+            if (data.getTouchedRenderDataId() == null) {
+                this.lastEvent = null;
+                continue;
+            }
+            
             // if we have another TouchDown - remove the process we made until
             // now
             if (this.lastEvent != null) {
@@ -45,15 +56,18 @@ public class GuiInteractionProcess extends LightweightProcess {
 
                     // only if both entities have the same id !
                     if (lastId.equalsIgnoreCase(currentId)) {
-                        ClickEvent clickEvent = Pools.get(ClickEvent.class).obtain();
+                        ClickEvent clickEvent = this.clickEventPool.obtain();
                         clickEvent.set(data.getTouchedRenderDataId());
 
                         this.clickEventChannel.offer(clickEvent);
                     }
 
                     // reset !
+                    this.inputTouchEventDataPool.free(this.lastEvent);
                     this.lastEvent = null;
                 }
+
+                this.inputTouchEventDataPool.free(data);
             }
         }
     }

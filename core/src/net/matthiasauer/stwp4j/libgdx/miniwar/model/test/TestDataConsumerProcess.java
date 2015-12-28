@@ -4,13 +4,13 @@ import com.badlogic.gdx.utils.Pools;
 
 import net.matthiasauer.stwp4j.ChannelInPort;
 import net.matthiasauer.stwp4j.LightweightProcess;
-import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventData;
+import net.matthiasauer.stwp4j.libgdx.miniwar.gui.interaction.ClickEvent;
 
 public class TestDataConsumerProcess extends LightweightProcess {
-    private final ChannelInPort<InputTouchEventData> inputChannel;
+    private final ChannelInPort<ClickEvent> inputChannel;
 
-    public TestDataConsumerProcess(ChannelInPort<InputTouchEventData> inputChannel) {
-        this.inputChannel = inputChannel;
+    public TestDataConsumerProcess(ChannelInPort<ClickEvent> channelInPort) {
+        this.inputChannel = channelInPort;
     }
 
     @Override
@@ -19,14 +19,13 @@ public class TestDataConsumerProcess extends LightweightProcess {
 
     @Override
     protected void execute() {
-        InputTouchEventData data = null;
+        ClickEvent data = null;
 
         while ((data = this.inputChannel.poll()) != null) {
-            System.out.println(
-                    data.getInputTouchEventType() + "(" + data.getArgument() + ") on " + data.getTouchedRenderDataId());
+            System.out.println("---> " + data.getId());
 
             // free the event !
-            Pools.get(InputTouchEventData.class).free(data);
+            Pools.get(ClickEvent.class).free(data);
         }
     }
 }
