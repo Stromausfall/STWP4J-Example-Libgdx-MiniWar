@@ -4,6 +4,8 @@ import net.matthiasauer.stwp4j.ChannelInPort;
 import net.matthiasauer.stwp4j.ChannelOutPort;
 import net.matthiasauer.stwp4j.LightweightProcess;
 import net.matthiasauer.stwp4j.libgdx.graphic.RenderData;
+import net.matthiasauer.stwp4j.libgdx.graphic.RenderPositionUnit;
+import net.matthiasauer.stwp4j.libgdx.graphic.SpriteRenderData;
 import net.matthiasauer.stwp4j.libgdx.miniwar.gui.interaction.ClickEvent;
 
 public class GameGui extends LightweightProcess {
@@ -14,10 +16,21 @@ public class GameGui extends LightweightProcess {
         this.renderDataChannel = renderDataChannel;
         this.clickEventChannel = clickEventChannel;
     }
+    
+    private RenderData createDummyElement() {
+        SpriteRenderData data = new SpriteRenderData();
+        data.set("dummy-id", 0, 0, 0, RenderPositionUnit.Pixels, null, 1, true, "normalCity");
+
+        return data;
+    }
+    
+    @Override
+    protected void preIteration() {
+        this.renderDataChannel.offer(this.createDummyElement());
+    }
 
     @Override
     protected void execute() {
-        // TODO Auto-generated method stub
-
+        while (this.clickEventChannel.poll() != null);
     }
 }
