@@ -1,4 +1,4 @@
-package net.matthiasauer.stwp4j.libgdx.miniwar.gui.interaction;
+package net.matthiasauer.stwp4j.libgdx.miniwar.view.clickable;
 
 import static org.junit.Assert.fail;
 
@@ -15,8 +15,10 @@ import net.matthiasauer.stwp4j.ChannelOutPort;
 import net.matthiasauer.stwp4j.Scheduler;
 import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventData;
 import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventType;
+import net.matthiasauer.stwp4j.libgdx.miniwar.view.clickable.ClickEvent;
+import net.matthiasauer.stwp4j.libgdx.miniwar.view.clickable.InteractionClickableProcess;
 
-public class TestGuiInteractionProcess {
+public class TestInteractionClickableProcess {
 
     private void expectCorrectEvent(ClickEvent clickEvent, AtomicReference<String> messageToFail,
             AtomicBoolean receivedCorrectEvent, String entityID) {
@@ -50,7 +52,7 @@ public class TestGuiInteractionProcess {
         Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
 
         // the process we want to test
-        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
+        testScheduler.addProcess(new InteractionClickableProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
 
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
@@ -92,7 +94,7 @@ public class TestGuiInteractionProcess {
         Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
 
         // the process we want to test
-        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
+        testScheduler.addProcess(new InteractionClickableProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
 
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
@@ -134,7 +136,7 @@ public class TestGuiInteractionProcess {
         Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
 
         // the process we want to test
-        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
+        testScheduler.addProcess(new InteractionClickableProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
 
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
@@ -177,7 +179,7 @@ public class TestGuiInteractionProcess {
         Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
 
         // the process we want to test
-        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
+        testScheduler.addProcess(new InteractionClickableProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
 
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
@@ -225,7 +227,7 @@ public class TestGuiInteractionProcess {
         Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
 
         // the process we want to test
-        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
+        testScheduler.addProcess(new InteractionClickableProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
 
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
@@ -267,7 +269,7 @@ public class TestGuiInteractionProcess {
         Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
 
         // the process we want to test
-        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
+        testScheduler.addProcess(new InteractionClickableProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
 
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
@@ -311,7 +313,7 @@ public class TestGuiInteractionProcess {
         Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
 
         // the process we want to test
-        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
+        testScheduler.addProcess(new InteractionClickableProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
 
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
@@ -354,7 +356,7 @@ public class TestGuiInteractionProcess {
         Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
 
         // the process we want to test
-        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
+        testScheduler.addProcess(new InteractionClickableProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
 
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {
@@ -396,7 +398,7 @@ public class TestGuiInteractionProcess {
         Channel<ClickEvent> clickEventChan = testScheduler.createMultiplexChannel("click event chan", ClickEvent.class);
 
         // the process we want to test
-        testScheduler.addProcess(new GuiInteractionProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
+        testScheduler.addProcess(new InteractionClickableProcess(inputTouchEventDataChan.createInPort(), clickEventChan.createOutPort()));
 
         // this implements the test logic !
         testScheduler.addProcess(new TestProcess(clickEventChan.createInPort(), inputTouchEventDataChan.createOutPort()) {

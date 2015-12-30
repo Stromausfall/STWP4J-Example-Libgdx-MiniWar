@@ -1,4 +1,4 @@
-package net.matthiasauer.stwp4j.libgdx.miniwar.gui;
+package net.matthiasauer.stwp4j.libgdx.miniwar.view;
 
 import net.matthiasauer.stwp4j.ChannelInPort;
 import net.matthiasauer.stwp4j.ChannelOutPort;
@@ -6,7 +6,7 @@ import net.matthiasauer.stwp4j.LightweightProcess;
 import net.matthiasauer.stwp4j.libgdx.graphic.RenderData;
 import net.matthiasauer.stwp4j.libgdx.graphic.RenderPositionUnit;
 import net.matthiasauer.stwp4j.libgdx.graphic.SpriteRenderData;
-import net.matthiasauer.stwp4j.libgdx.miniwar.gui.interaction.ClickEvent;
+import net.matthiasauer.stwp4j.libgdx.miniwar.view.clickable.ClickEvent;
 
 public class GameGui extends LightweightProcess {
     private final ChannelOutPort<RenderData> renderDataChannel;

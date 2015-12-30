@@ -1,9 +1,10 @@
-package net.matthiasauer.stwp4j.libgdx.miniwar.gui.interaction;
+package net.matthiasauer.stwp4j.libgdx.miniwar.view.clickable;
 
 import net.matthiasauer.stwp4j.ChannelInPort;
 import net.matthiasauer.stwp4j.ChannelOutPort;
 import net.matthiasauer.stwp4j.LightweightProcess;
 import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventData;
+import net.matthiasauer.stwp4j.libgdx.miniwar.view.clickable.ClickEvent;
 
 abstract class TestProcess extends LightweightProcess {
     public static final String ENTITY_ID = "entity#1";

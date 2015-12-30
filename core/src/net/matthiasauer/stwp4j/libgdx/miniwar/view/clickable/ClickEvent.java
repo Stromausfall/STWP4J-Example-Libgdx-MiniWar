@@ -1,4 +1,4 @@
-package net.matthiasauer.stwp4j.libgdx.miniwar.gui.interaction;
+package net.matthiasauer.stwp4j.libgdx.miniwar.view.clickable;
 
 public class ClickEvent {
     private String id;

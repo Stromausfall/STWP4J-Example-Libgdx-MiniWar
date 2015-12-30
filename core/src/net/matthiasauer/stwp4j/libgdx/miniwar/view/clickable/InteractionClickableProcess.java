@@ -1,4 +1,4 @@
-package net.matthiasauer.stwp4j.libgdx.miniwar.gui.interaction;
+package net.matthiasauer.stwp4j.libgdx.miniwar.view.clickable;
 
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
@@ -9,13 +9,13 @@ import net.matthiasauer.stwp4j.LightweightProcess;
 import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventData;
 import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventType;
 
-public class GuiInteractionProcess extends LightweightProcess {
+public class InteractionClickableProcess extends LightweightProcess {
     private final ChannelInPort<InputTouchEventData> inputTouchEventDataChannel;
     private final ChannelOutPort<ClickEvent> clickEventChannel;
     private final Pool<InputTouchEventData> inputTouchEventDataPool;
     private final Pool<ClickEvent> clickEventPool;
 
-    public GuiInteractionProcess(ChannelInPort<InputTouchEventData> inputTouchEventDataChannel,
+    public InteractionClickableProcess(ChannelInPort<InputTouchEventData> inputTouchEventDataChannel,
             ChannelOutPort<ClickEvent> clickEventChannel) {
         this.inputTouchEventDataChannel = inputTouchEventDataChannel;
         this.clickEventChannel = clickEventChannel;

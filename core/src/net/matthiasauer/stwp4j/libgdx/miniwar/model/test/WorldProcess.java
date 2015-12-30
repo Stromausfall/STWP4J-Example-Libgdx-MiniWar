@@ -1,4 +1,4 @@
-package net.matthiasauer.stwp4j.libgdx.miniwar.logic;
+package net.matthiasauer.stwp4j.libgdx.miniwar.model.test;
 
 import net.matthiasauer.stwp4j.ChannelInPort;
 import net.matthiasauer.stwp4j.ChannelOutPort;

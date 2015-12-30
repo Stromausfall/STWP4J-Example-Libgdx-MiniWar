@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.Pools;
 
 import net.matthiasauer.stwp4j.ChannelInPort;
 import net.matthiasauer.stwp4j.LightweightProcess;
-import net.matthiasauer.stwp4j.libgdx.miniwar.gui.interaction.ClickEvent;
+import net.matthiasauer.stwp4j.libgdx.miniwar.view.clickable.ClickEvent;
 
 public class TestDataConsumerProcess extends LightweightProcess {
     private final ChannelInPort<ClickEvent> inputChannel;
