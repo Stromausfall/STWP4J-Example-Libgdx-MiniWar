@@ -1,6 +1,8 @@
 package net.matthiasauer.stwp4j.libgdx.miniwar.view.clickable;
 
-public class ClickEvent {
+import com.badlogic.gdx.utils.Pool.Poolable;
+
+public class ClickEvent implements Poolable {
     private String id;
     
     public ClickEvent set(String id) {
@@ -11,5 +13,10 @@ public class ClickEvent {
     
     public String getId() {
         return this.id;
+    }
+    
+    @Override
+    public void reset() {
+        this.set(null);
     }
 }
