@@ -13,31 +13,39 @@ import net.matthiasauer.stwp4j.libgdx.miniwar.model.test.WorldInteraction;
 import net.matthiasauer.stwp4j.libgdx.miniwar.model.test.WorldProcess;
 import net.matthiasauer.stwp4j.libgdx.miniwar.model.test.WorldSnapShot;
 import net.matthiasauer.stwp4j.libgdx.miniwar.view.GameGui;
+import net.matthiasauer.stwp4j.libgdx.miniwar.view.clickable.ClickComponentEvent;
 import net.matthiasauer.stwp4j.libgdx.miniwar.view.clickable.ClickEvent;
 import net.matthiasauer.stwp4j.libgdx.miniwar.view.clickable.InteractionClickableProcess;
 
 public class EntryPoint extends ApplicationEntryPointProcess {
+    public EntryPoint() {
+        super(true, false);
+        // TODO Auto-generated constructor stub
+    }
+
     @Override
     public void create() {
         // Plumbing - channels
         Channel<ApplicationEvent> applicationEventChannel = this.applicationEventChannel;
         Channel<RenderData> renderDataChannel = this.scheduler.createMultiplexChannel("render data-channel",
-                RenderData.class);
+                RenderData.class, true, false);
         Channel<InputTouchEventData> inputTouchEventDataChannel = this.scheduler
-                .createMultiplexChannel("input touch event data-channel", InputTouchEventData.class);
+                .createMultiplexChannel("input touch event data-channel", InputTouchEventData.class, true, false);
         Channel<WorldInteraction> worldInteractionChannel = this.scheduler
-                .createMultiplexChannel("world-interaction channel", WorldInteraction.class);
+                .createMultiplexChannel("world-interaction channel", WorldInteraction.class, true, false);
         Channel<WorldSnapShot> worldSnapShotChannel = this.scheduler.createMultiplexChannel("world-snapshot channel",
-                WorldSnapShot.class);
+                WorldSnapShot.class, true, false);
         Channel<ClickEvent> clickEventChannel = this.scheduler.createMultiplexChannel("click-event channel",
-                ClickEvent.class);
+                ClickEvent.class, true, false);
+        Channel<ClickComponentEvent> clickComponentEventChannel = this.scheduler.createMultiplexChannel("click-component-event channel",
+                ClickComponentEvent.class, true, false);
 
         // Plumbing - processes
         scheduler.addProcess(new RenderProcess(Arrays.asList("data1.atlas"), true, renderDataChannel.createInPort(),
                 applicationEventChannel.createInPort(), inputTouchEventDataChannel.createOutPort()));
         scheduler.addProcess(
                 new WorldProcess(worldInteractionChannel.createInPort(), worldSnapShotChannel.createOutPort()));
-        scheduler.addProcess(new InteractionClickableProcess(inputTouchEventDataChannel.createInPort(), clickEventChannel.createOutPort()));
+        scheduler.addProcess(new InteractionClickableProcess(inputTouchEventDataChannel.createInPort(), clickEventChannel.createOutPort(), clickComponentEventChannel.createOutPort()));
         scheduler.addProcess(new GameGui(renderDataChannel.createOutPort(), clickEventChannel.createInPort()));
         
         scheduler.addProcess(new TestDataConsumerProcess(clickEventChannel.createInPort()));
