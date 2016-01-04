@@ -3,6 +3,8 @@ package net.matthiasauer.stwp4j.libgdx.miniwar.view.clickable;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.junit.Test;
 
 import com.badlogic.gdx.utils.Pool;
@@ -35,7 +37,7 @@ public class TestDisplayClickableProcess {
         SpriteRenderData touchedState = spriteRenderDataPool.obtain();
 
         touchedState.set(ENTITY_ID, 0, 0, 0, RenderPositionUnit.Percent, null, 1, true, "tex#2");
-
+System.err.println("check that freed");
         return touchedState;
     }
 
@@ -51,6 +53,8 @@ public class TestDisplayClickableProcess {
         DisplayClickableRequest request = new DisplayClickableRequest();
 
         request.set(this.createBaseState(), this.createTouchedState(), this.createClickState());
+        
+        outPort.offer(request);
     }
 
     private void sendClickComponentEvent(ChannelOutPort<ClickComponentEvent> outPort, String id,
@@ -62,13 +66,17 @@ public class TestDisplayClickableProcess {
         outPort.offer(clickComponentEvent);
     }
 
-    private void expectRenderData(ChannelInPort<RenderData> inPort, SpriteRenderData expected) {
+    private void expectRenderData(ChannelInPort<RenderData> inPort, SpriteRenderData expected, AtomicInteger counter) {
         SpriteRenderData data = (SpriteRenderData) inPort.poll();
 
-        assertNotNull("No RenderData element in the channel !", data);
-
-        assertEquals("incorrect id", expected.getId(), data.getId());
-        assertEquals("incorrect texture name", expected.getTextureName(), data.getTextureName());
+        if (data != null) {
+            counter.incrementAndGet();
+        
+            assertNotNull("No RenderData element in the channel !", data);
+    
+            assertEquals("incorrect id", expected.getId(), data.getId());
+            assertEquals("incorrect texture name", expected.getTextureName(), data.getTextureName());
+        }
     }
 
     @Test
@@ -86,6 +94,7 @@ public class TestDisplayClickableProcess {
         final ChannelOutPort<ClickComponentEvent> clickComponentEventOutPort = clickComponentEventChannel
                 .createOutPort();
         final ChannelInPort<RenderData> renderDataInPort = renderDataChannel.createInPort();
+        final AtomicInteger counter = new AtomicInteger(0);
 
         // the process we want to test
         testScheduler.addProcess(new DisplayClickableProcess(renderDataChannel.createOutPort(),
@@ -104,33 +113,26 @@ public class TestDisplayClickableProcess {
 
             @Override
             protected void execute() {
-                // send the request to display the clickable !
-                sendDefaultRequest(displayClickableRequestOutPort);
+                if ((subIteration < 6) && (iteration < 6)) {
+                    // send the request to display the clickable !
+                    sendDefaultRequest(displayClickableRequestOutPort);
+                }
 
                 switch (iteration) {
                 case 0:
-                    if (subIteration == 2) {
-                        expectRenderData(renderDataInPort, createBaseState());
-                    }
+                    expectRenderData(renderDataInPort, createBaseState(), counter);
                     break;
                 case 1:
-                    if (subIteration == 2) {
-                        expectRenderData(renderDataInPort, createTouchedState());
-                    }
+                    expectRenderData(renderDataInPort, createTouchedState(), counter);
                     break;
                 case 2:
-                    if (subIteration == 2) {
-                        expectRenderData(renderDataInPort, createClickState());
-                    }
+                    expectRenderData(renderDataInPort, createClickState(), counter);
+                    break;
                 case 3:
-                    if (subIteration == 2) {
-                        expectRenderData(renderDataInPort, createBaseState());
-                    }
+                    expectRenderData(renderDataInPort, createBaseState(), counter);
                     break;
                 case 4:
-                    if (subIteration == 2) {
-                        expectRenderData(renderDataInPort, createBaseState());
-                    }
+                    expectRenderData(renderDataInPort, createBaseState(), counter);
                     break;
                 }
 
@@ -157,5 +159,7 @@ public class TestDisplayClickableProcess {
         this.sendDefaultRequest(displayClickableRequestOutPort);
         this.sendClickComponentEvent(clickComponentEventOutPort, ENTITY_ID, ClickComponentType.Left);
         testScheduler.performIteration();
+        
+        assertEquals("not enough checks were made", 5, counter.get());
     }
 }
