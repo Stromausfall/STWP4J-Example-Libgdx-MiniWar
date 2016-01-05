@@ -17,10 +17,10 @@ public class DisplayClickableRequest implements Poolable {
         if ((baseState == null) && (this.baseState != null)) {
             Pools.free(this.baseState);
         }
-        if ((baseState == null) && (this.baseState != null)) {
+        if ((baseState == null) && (this.touchedState != null)) {
             Pools.free(this.touchedState);
         }
-        if ((baseState == null) && (this.baseState != null)) {
+        if ((baseState == null) && (this.clickState != null)) {
             Pools.free(this.clickState);
         }
         

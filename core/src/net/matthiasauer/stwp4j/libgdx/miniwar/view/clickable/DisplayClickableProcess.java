@@ -46,9 +46,10 @@ public class DisplayClickableProcess extends LightweightProcess {
     
     private void handleClickComponentEvents() {
         ClickComponentEvent event = null;
-        
+        System.err.println("----------------");
         while ((event = this.clickComponentEventChannel.poll()) != null) {
             this.clickComponents.add(event);
+            System.err.println("-- " + event.getId() + " - " + event.getClickComponentType());
         }
     }
 
@@ -67,28 +68,32 @@ public class DisplayClickableProcess extends LightweightProcess {
             
             String id = event.getId();
             DisplayClickableRequest request = this.requests.get(id);
-System.err.println("GUI should only carry info of one iteration - therefore the control needs to receive and create more events (of the same)...");
-System.err.println("makes no sense ! put all that into the controller - the controller should get interaction and simply create the render events"));
+            
+            
+?????????????????????????? ONE BUTTON PROCESS PER BUTTON !            
+            
+            
             if (request != null) {
                 ClickComponentType type = event.getClickComponentType();
                 
                 if (type != null) {
-                switch (event.getClickComponentType()) {
-                case Down:
-                    this.renderDataChannel.offer(request.getClickState());
-                    break;
-                case Over:
-                    this.renderDataChannel.offer(request.getTouchedState());
-                    break;
-                case Up:
-                    this.renderDataChannel.offer(request.getBaseState());
-                    break;
-                case Left:
-                    this.renderDataChannel.offer(request.getBaseState());
-                    break;
-                default:
-                    this.renderDataChannel.offer(request.getBaseState());
-                    break;
+                    switch (event.getClickComponentType()) {
+                    case Down:
+                        this.renderDataChannel.offer(request.getClickState());
+                        break;
+                    case Over:
+                        this.renderDataChannel.offer(request.getTouchedState());
+                        break;
+                    case Up:
+                        this.renderDataChannel.offer(request.getBaseState());
+                        break;
+                    case Left:
+                        this.renderDataChannel.offer(request.getBaseState());
+                        break;
+                    default:
+                        this.renderDataChannel.offer(request.getBaseState());
+                        break;
+                    }
                 }
             
                 processed.add(event);
