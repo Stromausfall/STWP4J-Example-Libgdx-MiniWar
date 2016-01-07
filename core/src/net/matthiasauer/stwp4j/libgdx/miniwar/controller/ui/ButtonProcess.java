@@ -12,22 +12,44 @@ public class ButtonProcess extends LightweightProcess {
     private final RenderData baseState;
     private final RenderData overState;
     private final RenderData downState;
-    
-    public ButtonProcess(ChannelOutPort<RenderData> renderOutput, ChannelInPort<InputTouchEventData> touchEventInput, RenderData baseState, RenderData overState, RenderData downState) {
+    private final String id;
+    private RenderData currentState;
+
+    public ButtonProcess(ChannelOutPort<RenderData> renderOutput, ChannelInPort<InputTouchEventData> touchEventInput,
+            RenderData baseState, RenderData overState, RenderData downState) {
         this.renderOutput = renderOutput;
         this.touchEventInput = touchEventInput;
         this.baseState = baseState;
         this.overState = overState;
         this.downState = downState;
-    }
-    
-    @Override
-    protected void preIteration() {
-        this.renderOutput.offer(this.baseState);
-    }
-    
-    @Override
-    protected void execute() {
+
+        if (!this.baseState.getId().equals(this.overState.getId())
+                || (!this.overState.getId().equals(this.downState.getId()))) {
+            throw new IllegalArgumentException("all RenderData must have the same ID !");
+        }
+
+        this.id = this.baseState.getId();
+
+        this.currentState = this.baseState;
     }
 
+    @Override
+    protected void execute() {
+        InputTouchEventData inputTouchEventData = null;
+
+        while ((inputTouchEventData = this.touchEventInput.poll()) != null) {
+            final String targetId = inputTouchEventData.getTouchedRenderDataId();
+
+            if (targetId != null) {
+                if (targetId.equals(this.id)) {
+                    this.currentState = this.overState;
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void postIteration() {
+        this.renderOutput.offer(this.currentState);
+    }
 }
