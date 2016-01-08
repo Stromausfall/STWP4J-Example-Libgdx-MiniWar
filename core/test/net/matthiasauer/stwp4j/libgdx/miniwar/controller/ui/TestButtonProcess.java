@@ -44,7 +44,6 @@ public class TestButtonProcess {
         final ChannelInPort<RenderData> renderInput = renderChannel.createInPort();
 
         scheduler.performIteration();
-        scheduler.performIteration();
 
         SpriteRenderData renderData = (SpriteRenderData) renderInput.poll();
 
@@ -93,9 +92,7 @@ public class TestButtonProcess {
         final InputTouchEventData event = touchEventPool.obtain();
         event.set(InputTouchEventType.Moved, 0, new Vector2(), new Vector2());
         event.setTouchedRenderDataId("1");
-
         touchOutput.offer(event);
-        scheduler.performIteration();
 
         for (int i = 0; i < 10; i++) {
             scheduler.performIteration();
@@ -123,9 +120,7 @@ public class TestButtonProcess {
         final InputTouchEventData event = touchEventPool.obtain();
         event.set(InputTouchEventType.Moved, 0, new Vector2(), new Vector2());
         event.setTouchedRenderDataId("12");
-
         touchOutput.offer(event);
-        scheduler.performIteration();
 
         for (int i = 0; i < 10; i++) {
             scheduler.performIteration();
@@ -154,7 +149,6 @@ public class TestButtonProcess {
         event.set(InputTouchEventType.Moved, 0, new Vector2(), new Vector2());
         event.setTouchedRenderDataId("1");
         touchOutput.offer(event);
-        scheduler.performIteration();
 
         for (int i = 0; i < 5; i++) {
             scheduler.performIteration();
@@ -166,11 +160,6 @@ public class TestButtonProcess {
         event2.set(InputTouchEventType.TouchDown, 0, new Vector2(), new Vector2());
         event2.setTouchedRenderDataId("1");
         touchOutput.offer(event2);
-        scheduler.performIteration();
-        
-        // empty the renderInput
-        while (renderInput.poll() != null) {
-        }
 
         for (int i = 0; i < 5; i++) {
             scheduler.performIteration();
