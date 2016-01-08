@@ -4,6 +4,7 @@ import net.matthiasauer.stwp4j.ChannelInPort;
 import net.matthiasauer.stwp4j.ChannelOutPort;
 import net.matthiasauer.stwp4j.LightweightProcess;
 import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventData;
+import net.matthiasauer.stwp4j.libgdx.graphic.InputTouchEventType;
 import net.matthiasauer.stwp4j.libgdx.graphic.RenderData;
 
 public class ButtonProcess extends LightweightProcess {
@@ -29,7 +30,6 @@ public class ButtonProcess extends LightweightProcess {
         }
 
         this.id = this.baseState.getId();
-
         this.currentState = this.baseState;
     }
 
@@ -39,10 +39,14 @@ public class ButtonProcess extends LightweightProcess {
 
         while ((inputTouchEventData = this.touchEventInput.poll()) != null) {
             final String targetId = inputTouchEventData.getTouchedRenderDataId();
-
             if (targetId != null) {
                 if (targetId.equals(this.id)) {
+                    
                     this.currentState = this.overState;
+
+                    if (inputTouchEventData.getInputTouchEventType() == InputTouchEventType.TouchDown) {
+                        this.currentState = this.downState;
+                    }
                 }
             }
         }

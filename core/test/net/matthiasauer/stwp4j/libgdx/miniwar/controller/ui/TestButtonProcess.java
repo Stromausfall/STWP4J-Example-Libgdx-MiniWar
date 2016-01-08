@@ -136,4 +136,49 @@ public class TestButtonProcess {
         assertNull("there should be no more renderdata !", renderInput.poll());
     }
 
+    @Test
+    public void testMoveAndDownGeneratesFirstOverThenDownContinouusly() {
+        Scheduler scheduler = new Scheduler();
+
+        final Channel<RenderData> renderChannel = scheduler.createMultiplexChannel("#1", RenderData.class, false,
+                false);
+        final Channel<InputTouchEventData> touchEventChannel = scheduler.createMultiplexChannel("#2",
+                InputTouchEventData.class, false, false);
+        scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(),
+                this.createRenderData("1", "tex#base"), this.createRenderData("1", "tex#over"),
+                this.createRenderData("1", "tex#down")));
+        final ChannelInPort<RenderData> renderInput = renderChannel.createInPort();
+        final ChannelOutPort<InputTouchEventData> touchOutput = touchEventChannel.createOutPort();
+
+        final InputTouchEventData event = touchEventPool.obtain();
+        event.set(InputTouchEventType.Moved, 0, new Vector2(), new Vector2());
+        event.setTouchedRenderDataId("1");
+        touchOutput.offer(event);
+        scheduler.performIteration();
+
+        for (int i = 0; i < 5; i++) {
+            scheduler.performIteration();
+            SpriteRenderData renderData = (SpriteRenderData) renderInput.poll();
+            assertEquals("the renderData was correct", "tex#over", renderData.getTextureName());
+        }
+
+        final InputTouchEventData event2 = touchEventPool.obtain();
+        event2.set(InputTouchEventType.TouchDown, 0, new Vector2(), new Vector2());
+        event2.setTouchedRenderDataId("1");
+        touchOutput.offer(event2);
+        scheduler.performIteration();
+        
+        // empty the renderInput
+        while (renderInput.poll() != null) {
+        }
+
+        for (int i = 0; i < 5; i++) {
+            scheduler.performIteration();
+            SpriteRenderData renderData = (SpriteRenderData) renderInput.poll();
+            assertEquals("the renderData was correct", "tex#down", renderData.getTextureName());
+        }
+
+        assertNull("there should be no more renderdata !", renderInput.poll());
+    }
+
 }
