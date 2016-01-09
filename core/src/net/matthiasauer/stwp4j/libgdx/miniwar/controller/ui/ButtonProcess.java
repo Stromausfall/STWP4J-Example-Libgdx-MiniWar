@@ -39,15 +39,18 @@ public class ButtonProcess extends LightweightProcess {
 
         while ((inputTouchEventData = this.touchEventInput.poll()) != null) {
             final String targetId = inputTouchEventData.getTouchedRenderDataId();
-            if (targetId != null) {
-                if (targetId.equals(this.id)) {
-                    
+            
+            // if the event targets THIS button
+            if ((targetId != null) && (targetId.equals(this.id))) {
+                // DOWN event
+                if (inputTouchEventData.getInputTouchEventType() == InputTouchEventType.TouchDown) {
+                    this.currentState = this.downState;
+                } else {
                     this.currentState = this.overState;
-
-                    if (inputTouchEventData.getInputTouchEventType() == InputTouchEventType.TouchDown) {
-                        this.currentState = this.downState;
-                    }
                 }
+            } else {
+                // event doesn't target THIS button
+                this.currentState = this.baseState;
             }
         }
     }

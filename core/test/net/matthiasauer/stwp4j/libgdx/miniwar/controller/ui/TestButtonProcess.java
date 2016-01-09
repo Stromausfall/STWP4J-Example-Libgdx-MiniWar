@@ -1,12 +1,13 @@
 package net.matthiasauer.stwp4j.libgdx.miniwar.controller.ui;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Pool;
-import com.badlogic.gdx.utils.Pools;
 
 import net.matthiasauer.stwp4j.Channel;
 import net.matthiasauer.stwp4j.ChannelInPort;
@@ -19,15 +20,26 @@ import net.matthiasauer.stwp4j.libgdx.graphic.RenderPositionUnit;
 import net.matthiasauer.stwp4j.libgdx.graphic.SpriteRenderData;
 
 public class TestButtonProcess {
-    Pool<SpriteRenderData> pool = Pools.get(SpriteRenderData.class);
-    Pool<InputTouchEventData> touchEventPool = Pools.get(InputTouchEventData.class);
-
     private SpriteRenderData createRenderData(String id, String texture) {
-        SpriteRenderData data = pool.obtain();
+        SpriteRenderData data = new SpriteRenderData();
 
         data.set(id, 0, 0, 0, RenderPositionUnit.Percent, null, 2, true, texture);
 
         return data;
+    }
+
+    private void fireEvent(ChannelOutPort<InputTouchEventData> outPort, String id, InputTouchEventType type) {
+        final InputTouchEventData event = new InputTouchEventData();
+        event.set(type, 0, new Vector2(), new Vector2());
+        event.setTouchedRenderDataId(id);
+        outPort.offer(event);
+    }
+
+    private void performIterationAndExpect(Scheduler scheduler, ChannelInPort<RenderData> renderInput,
+            String expectedTextureName) {
+        scheduler.performIteration();
+        SpriteRenderData renderData = (SpriteRenderData) renderInput.poll();
+        assertEquals("the renderData was correct", expectedTextureName, renderData.getTextureName());
     }
 
     @Test
@@ -89,15 +101,10 @@ public class TestButtonProcess {
         final ChannelInPort<RenderData> renderInput = renderChannel.createInPort();
         final ChannelOutPort<InputTouchEventData> touchOutput = touchEventChannel.createOutPort();
 
-        final InputTouchEventData event = touchEventPool.obtain();
-        event.set(InputTouchEventType.Moved, 0, new Vector2(), new Vector2());
-        event.setTouchedRenderDataId("1");
-        touchOutput.offer(event);
+        this.fireEvent(touchOutput, "1", InputTouchEventType.Moved);
 
         for (int i = 0; i < 10; i++) {
-            scheduler.performIteration();
-            SpriteRenderData renderData = (SpriteRenderData) renderInput.poll();
-            assertEquals("the renderData was correct", renderData.getTextureName(), "tex#touched");
+            this.performIterationAndExpect(scheduler, renderInput, "tex#touched");
         }
 
         assertNull("there should be no more renderdata !", renderInput.poll());
@@ -117,15 +124,10 @@ public class TestButtonProcess {
         final ChannelInPort<RenderData> renderInput = renderChannel.createInPort();
         final ChannelOutPort<InputTouchEventData> touchOutput = touchEventChannel.createOutPort();
 
-        final InputTouchEventData event = touchEventPool.obtain();
-        event.set(InputTouchEventType.Moved, 0, new Vector2(), new Vector2());
-        event.setTouchedRenderDataId("12");
-        touchOutput.offer(event);
+        this.fireEvent(touchOutput, "12", InputTouchEventType.Moved);
 
         for (int i = 0; i < 10; i++) {
-            scheduler.performIteration();
-            SpriteRenderData renderData = (SpriteRenderData) renderInput.poll();
-            assertEquals("the renderData was correct", renderData.getTextureName(), "tex#1");
+            this.performIterationAndExpect(scheduler, renderInput, "tex#1");
         }
 
         assertNull("there should be no more renderdata !", renderInput.poll());
@@ -145,29 +147,75 @@ public class TestButtonProcess {
         final ChannelInPort<RenderData> renderInput = renderChannel.createInPort();
         final ChannelOutPort<InputTouchEventData> touchOutput = touchEventChannel.createOutPort();
 
-        final InputTouchEventData event = touchEventPool.obtain();
-        event.set(InputTouchEventType.Moved, 0, new Vector2(), new Vector2());
-        event.setTouchedRenderDataId("1");
-        touchOutput.offer(event);
+        this.fireEvent(touchOutput, "1", InputTouchEventType.Moved);
 
         for (int i = 0; i < 5; i++) {
-            scheduler.performIteration();
-            SpriteRenderData renderData = (SpriteRenderData) renderInput.poll();
-            assertEquals("the renderData was correct", "tex#over", renderData.getTextureName());
+            this.performIterationAndExpect(scheduler, renderInput, "tex#over");
         }
 
-        final InputTouchEventData event2 = touchEventPool.obtain();
-        event2.set(InputTouchEventType.TouchDown, 0, new Vector2(), new Vector2());
-        event2.setTouchedRenderDataId("1");
-        touchOutput.offer(event2);
+        this.fireEvent(touchOutput, "1", InputTouchEventType.TouchDown);
 
         for (int i = 0; i < 5; i++) {
-            scheduler.performIteration();
-            SpriteRenderData renderData = (SpriteRenderData) renderInput.poll();
-            assertEquals("the renderData was correct", "tex#down", renderData.getTextureName());
+            this.performIterationAndExpect(scheduler, renderInput, "tex#down");
         }
 
         assertNull("there should be no more renderdata !", renderInput.poll());
     }
 
+    @Test
+    public void testMoveAndDownAndLeaveAndMoveAndDownAgain() {
+        Scheduler scheduler = new Scheduler();
+
+        final Channel<RenderData> renderChannel = scheduler.createMultiplexChannel("#1", RenderData.class, false,
+                false);
+        final Channel<InputTouchEventData> touchEventChannel = scheduler.createMultiplexChannel("#2",
+                InputTouchEventData.class, false, false);
+        scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(),
+                this.createRenderData("1", "tex#base"), this.createRenderData("1", "tex#over"),
+                this.createRenderData("1", "tex#down")));
+        final ChannelInPort<RenderData> renderInput = renderChannel.createInPort();
+        final ChannelOutPort<InputTouchEventData> touchOutput = touchEventChannel.createOutPort();
+
+        // OVER
+        this.fireEvent(touchOutput, "1", InputTouchEventType.Moved);
+        this.performIterationAndExpect(scheduler, renderInput, "tex#over");
+
+        // TOUCH
+        this.fireEvent(touchOutput, "1", InputTouchEventType.TouchDown);
+        this.performIterationAndExpect(scheduler, renderInput, "tex#down");
+
+        // LEAVE
+        this.fireEvent(touchOutput, "12", InputTouchEventType.Moved);
+        this.performIterationAndExpect(scheduler, renderInput, "tex#base");
+
+        // OVER
+        this.fireEvent(touchOutput, "1", InputTouchEventType.Moved);
+        this.performIterationAndExpect(scheduler, renderInput, "tex#over");
+
+        // TOUCH
+        this.fireEvent(touchOutput, "1", InputTouchEventType.TouchDown);
+        this.performIterationAndExpect(scheduler, renderInput, "tex#down");
+
+        assertNull("there should be no more renderdata !", renderInput.poll());
+    }
+
+    @Test
+    public void testThatInputTouchEvent() {
+        Scheduler scheduler = new Scheduler();
+
+        final Channel<RenderData> renderChannel = scheduler.createMultiplexChannel("#1", RenderData.class, false,
+                false);
+        final Channel<InputTouchEventData> touchEventChannel = scheduler.createMultiplexChannel("#2",
+                InputTouchEventData.class, false, false);
+        scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(),
+                this.createRenderData("1", "tex#1"), this.createRenderData("1", "tex#touched"),
+                this.createRenderData("1", "tex#3")));
+        final ChannelInPort<RenderData> renderInput = renderChannel.createInPort();
+        final ChannelOutPort<InputTouchEventData> touchOutput = touchEventChannel.createOutPort();
+
+        this.fireEvent(touchOutput, "1", InputTouchEventType.Moved);
+        this.performIterationAndExpect(scheduler, renderInput, "tex#touched");
+
+        assertNull("there should be no more renderdata !", renderInput.poll());
+    }
 }
