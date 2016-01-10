@@ -9,6 +9,7 @@ import net.matthiasauer.stwp4j.libgdx.graphic.RenderData;
 
 public class ButtonProcess extends LightweightProcess {
     private final ChannelOutPort<RenderData> renderOutput;
+    private final ChannelOutPort<ButtonClickEvent> buttonClickOutput;
     private final ChannelInPort<InputTouchEventData> touchEventInput;
     private final RenderData baseState;
     private final RenderData overState;
@@ -17,9 +18,11 @@ public class ButtonProcess extends LightweightProcess {
     private RenderData currentState;
 
     public ButtonProcess(ChannelOutPort<RenderData> renderOutput, ChannelInPort<InputTouchEventData> touchEventInput,
-            RenderData baseState, RenderData overState, RenderData downState) {
+            ChannelOutPort<ButtonClickEvent> buttonClickOutput, RenderData baseState, RenderData overState,
+            RenderData downState) {
         this.renderOutput = renderOutput;
         this.touchEventInput = touchEventInput;
+        this.buttonClickOutput = buttonClickOutput;
         this.baseState = baseState;
         this.overState = overState;
         this.downState = downState;
@@ -39,14 +42,22 @@ public class ButtonProcess extends LightweightProcess {
 
         while ((inputTouchEventData = this.touchEventInput.poll()) != null) {
             final String targetId = inputTouchEventData.getTouchedRenderDataId();
-            
+            final InputTouchEventType eventType = inputTouchEventData.getInputTouchEventType();
+
             // if the event targets THIS button
             if ((targetId != null) && (targetId.equals(this.id))) {
                 // DOWN event
-                if (inputTouchEventData.getInputTouchEventType() == InputTouchEventType.TouchDown) {
+                if (eventType == InputTouchEventType.TouchDown) {
                     this.currentState = this.downState;
                 } else {
-                    this.currentState = this.overState;
+                    if ((eventType == InputTouchEventType.TouchUp) && (this.currentState == this.downState)) {
+                        ButtonClickEvent buttonClickEvent = new ButtonClickEvent();
+                        buttonClickEvent.set(targetId);
+                        
+                        this.buttonClickOutput.offer(buttonClickEvent);
+                    }
+                    
+                    this.currentState = this.overState;                    
                 }
             } else {
                 // event doesn't target THIS button

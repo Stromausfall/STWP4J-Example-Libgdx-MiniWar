@@ -50,7 +50,9 @@ public class TestButtonProcess {
                 false);
         final Channel<InputTouchEventData> touchEventChannel = scheduler.createMultiplexChannel("#2",
                 InputTouchEventData.class, true, false);
-        scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(),
+        final Channel<ButtonClickEvent> buttonClickEventChannel = scheduler.createMultiplexChannel("#4",
+                ButtonClickEvent.class, false, true);
+        scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(), buttonClickEventChannel.createOutPort(),
                 this.createRenderData("1", "tex#1"), this.createRenderData("1", "tex#2"),
                 this.createRenderData("1", "tex#3")));
         final ChannelInPort<RenderData> renderInput = renderChannel.createInPort();
@@ -72,9 +74,11 @@ public class TestButtonProcess {
                 false);
         final Channel<InputTouchEventData> touchEventChannel = scheduler.createMultiplexChannel("#2",
                 InputTouchEventData.class, true, false);
+        final Channel<ButtonClickEvent> buttonClickEventChannel = scheduler.createMultiplexChannel("#4",
+                ButtonClickEvent.class, false, true);
 
         try {
-            scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(),
+            scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(), buttonClickEventChannel.createOutPort(),
                     this.createRenderData("1", "tex#1"), this.createRenderData("2", "tex#2"),
                     this.createRenderData("3", "tex#3")));
         } catch (IllegalArgumentException e) {
@@ -95,7 +99,9 @@ public class TestButtonProcess {
                 false);
         final Channel<InputTouchEventData> touchEventChannel = scheduler.createMultiplexChannel("#2",
                 InputTouchEventData.class, false, false);
-        scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(),
+        final Channel<ButtonClickEvent> buttonClickEventChannel = scheduler.createMultiplexChannel("#4",
+                ButtonClickEvent.class, false, true);
+        scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(), buttonClickEventChannel.createOutPort(),
                 this.createRenderData("1", "tex#1"), this.createRenderData("1", "tex#touched"),
                 this.createRenderData("1", "tex#3")));
         final ChannelInPort<RenderData> renderInput = renderChannel.createInPort();
@@ -118,7 +124,9 @@ public class TestButtonProcess {
                 false);
         final Channel<InputTouchEventData> touchEventChannel = scheduler.createMultiplexChannel("#2",
                 InputTouchEventData.class, false, false);
-        scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(),
+        final Channel<ButtonClickEvent> buttonClickEventChannel = scheduler.createMultiplexChannel("#4",
+                ButtonClickEvent.class, false, true);
+        scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(), buttonClickEventChannel.createOutPort(),
                 this.createRenderData("1", "tex#1"), this.createRenderData("1", "tex#touched"),
                 this.createRenderData("1", "tex#3")));
         final ChannelInPort<RenderData> renderInput = renderChannel.createInPort();
@@ -141,7 +149,9 @@ public class TestButtonProcess {
                 false);
         final Channel<InputTouchEventData> touchEventChannel = scheduler.createMultiplexChannel("#2",
                 InputTouchEventData.class, false, false);
-        scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(),
+        final Channel<ButtonClickEvent> buttonClickEventChannel = scheduler.createMultiplexChannel("#4",
+                ButtonClickEvent.class, false, true);
+        scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(), buttonClickEventChannel.createOutPort(),
                 this.createRenderData("1", "tex#base"), this.createRenderData("1", "tex#over"),
                 this.createRenderData("1", "tex#down")));
         final ChannelInPort<RenderData> renderInput = renderChannel.createInPort();
@@ -170,7 +180,9 @@ public class TestButtonProcess {
                 false);
         final Channel<InputTouchEventData> touchEventChannel = scheduler.createMultiplexChannel("#2",
                 InputTouchEventData.class, false, false);
-        scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(),
+        final Channel<ButtonClickEvent> buttonClickEventChannel = scheduler.createMultiplexChannel("#4",
+                ButtonClickEvent.class, false, true);
+        scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(), buttonClickEventChannel.createOutPort(),
                 this.createRenderData("1", "tex#base"), this.createRenderData("1", "tex#over"),
                 this.createRenderData("1", "tex#down")));
         final ChannelInPort<RenderData> renderInput = renderChannel.createInPort();
@@ -207,7 +219,9 @@ public class TestButtonProcess {
                 false);
         final Channel<InputTouchEventData> touchEventChannel = scheduler.createMultiplexChannel("#2",
                 InputTouchEventData.class, false, false);
-        scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(),
+        final Channel<ButtonClickEvent> buttonClickEventChannel = scheduler.createMultiplexChannel("#4",
+                ButtonClickEvent.class, false, true);
+        scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(), buttonClickEventChannel.createOutPort(),
                 this.createRenderData("1", "tex#1"), this.createRenderData("1", "tex#touched"),
                 this.createRenderData("1", "tex#3")));
         final ChannelInPort<RenderData> renderInput = renderChannel.createInPort();
@@ -217,5 +231,43 @@ public class TestButtonProcess {
         this.performIterationAndExpect(scheduler, renderInput, "tex#touched");
 
         assertNull("there should be no more renderdata !", renderInput.poll());
+    }
+
+    @Test
+    public void testMoveButtonClickEventIsFired() {
+        Scheduler scheduler = new Scheduler();
+
+        final Channel<RenderData> renderChannel = scheduler.createMultiplexChannel("#1", RenderData.class, false,
+                false);
+        final Channel<InputTouchEventData> touchEventChannel = scheduler.createMultiplexChannel("#2",
+                InputTouchEventData.class, false, false);
+        final Channel<ButtonClickEvent> buttonClickEventChannel = scheduler.createMultiplexChannel("#4",
+                ButtonClickEvent.class, false, true);
+        scheduler.addProcess(new ButtonProcess(renderChannel.createOutPort(), touchEventChannel.createInPort(), buttonClickEventChannel.createOutPort(),
+                this.createRenderData("1", "tex#base"), this.createRenderData("1", "tex#over"),
+                this.createRenderData("1", "tex#down")));
+        final ChannelInPort<RenderData> renderInput = renderChannel.createInPort();
+        final ChannelOutPort<InputTouchEventData> touchOutput = touchEventChannel.createOutPort();
+        final ChannelInPort<ButtonClickEvent> buttonClickOutput = buttonClickEventChannel.createInPort();
+
+        // OVER
+        assertNull("buttonClickEvent generated !", buttonClickOutput.poll());
+        this.fireEvent(touchOutput, "1", InputTouchEventType.Moved);
+        this.performIterationAndExpect(scheduler, renderInput, "tex#over");
+
+        // TOUCH
+        assertNull("buttonClickEvent generated !", buttonClickOutput.poll());
+        this.fireEvent(touchOutput, "1", InputTouchEventType.TouchDown);
+        this.performIterationAndExpect(scheduler, renderInput, "tex#down");
+
+        // UP
+        assertNull("buttonClickEvent generated !", buttonClickOutput.poll());
+        this.fireEvent(touchOutput, "1", InputTouchEventType.TouchUp);
+        this.performIterationAndExpect(scheduler, renderInput, "tex#over");
+
+        ButtonClickEvent buttonClickEvent = buttonClickOutput.poll();
+        
+        assertNotNull("no buttonClickEvent generated !", buttonClickEvent);
+        assertEquals("incorrect id", "1", buttonClickEvent.getId());
     }
 }
