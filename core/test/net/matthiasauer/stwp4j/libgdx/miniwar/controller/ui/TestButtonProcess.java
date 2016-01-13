@@ -69,15 +69,19 @@ public class TestButtonProcess {
     }
 
     private void expect(Collection<SpriteRenderData> renderData, String id, String expectedTextureName) {
+        String errorMessage = "";
+        
         for (SpriteRenderData element : renderData) {
             if (element.getId() != null) {
                 if (element.getId().equals(id) && element.getTextureName().equals(expectedTextureName)) {
                     return;
                 }
+                
+                errorMessage += "id:'" + element.getId() + "' with texture:'" + element.getTextureName() + "', ";
             }
         }
         
-        fail("found no SpriteRenderData of id '" + id + "' with texture '" + expectedTextureName + "'");
+        fail("found no SpriteRenderData of id '" + id + "' with texture '" + expectedTextureName + "' - only found " + errorMessage);
     }
 
     @Test
@@ -371,7 +375,7 @@ public class TestButtonProcess {
 
         // TOUCH
         assertNull("buttonClickEvent generated !", buttonClickOutput.poll());
-        this.fireEvent(touchOutput, "1", InputTouchEventType.TouchDown);
+        this.fireEvent(touchOutput, "1", InputTouchEventType.TouchDown, true);
         List<SpriteRenderData> events2 = this.performIterationAndExpect(scheduler, renderInput, "tex#down", "tex#base");
         expect(events2, "1", "tex#down");
         expect(events2, "2", "tex#base");
