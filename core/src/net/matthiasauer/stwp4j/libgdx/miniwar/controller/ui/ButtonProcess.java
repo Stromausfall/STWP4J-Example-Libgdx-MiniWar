@@ -16,13 +16,16 @@ public class ButtonProcess extends LightweightProcess {
     private final RenderData downState;
     private final String id;
     private RenderData currentState;
-
     private boolean mouseIsDown;
     private String mouseDownOnEntity;
+    private boolean reactToMouse;
+    private boolean stillClickedDownOnThis;
 
     public ButtonProcess(ChannelOutPort<RenderData> renderOutput, ChannelInPort<InputTouchEvent> touchEventInput,
             ChannelOutPort<ButtonClickEvent> buttonClickOutput, RenderData baseState, RenderData overState,
             RenderData downState) {
+        this.reactToMouse = true;
+        this.stillClickedDownOnThis = false;
         this.mouseIsDown = false;
         this.mouseDownOnEntity = null;
         this.renderOutput = renderOutput;
@@ -40,6 +43,57 @@ public class ButtonProcess extends LightweightProcess {
         this.id = this.baseState.getId();
         this.currentState = this.baseState;
     }
+    
+    private void calculateMouseStates(String targetId, boolean isTouched) {
+        if ((this.mouseIsDown == false) && isTouched) {
+            this.mouseIsDown = true;
+            this.mouseDownOnEntity = targetId;
+        }
+
+        if (!isTouched) {
+            this.mouseDownOnEntity = null;
+            this.mouseIsDown = false;
+        }
+    }
+    
+    private void calculateButtonState(String targetId, boolean isTouched) {
+        this.calculateMouseStates(targetId, isTouched);
+
+        this.reactToMouse = true;
+        this.stillClickedDownOnThis = false;
+        
+        if (this.mouseIsDown) {
+            if (this.mouseDownOnEntity != null) {
+                if (!this.mouseDownOnEntity.equals(this.id)) {
+                    this.reactToMouse = false;
+                } else {
+                    this.stillClickedDownOnThis = true;
+                }
+            } else {
+                this.reactToMouse = false;
+            }
+        }
+    }
+    
+    private void handleMouseOnButton(String targetId, boolean isTouched, InputTouchEventType eventType) {
+        // DOWN event
+        if (eventType == InputTouchEventType.TouchDown) {
+            this.currentState = this.downState;
+        } else {
+            if ((eventType == InputTouchEventType.TouchUp) && (this.currentState == this.downState)) {
+                ButtonClickEvent buttonClickEvent = new ButtonClickEvent();
+                buttonClickEvent.set(targetId);
+
+                this.buttonClickOutput.offer(buttonClickEvent);
+            }
+
+            if (isTouched) {
+                this.currentState = this.downState;
+            } else {
+                this.currentState = this.overState;
+            }
+        }
+    }
 
     @Override
     protected void execute() {
@@ -48,54 +102,17 @@ public class ButtonProcess extends LightweightProcess {
         while ((inputTouchEventData = this.touchEventInput.poll()) != null) {
             final String targetId = inputTouchEventData.getTouchedRenderDataId();
             final InputTouchEventType eventType = inputTouchEventData.getInputTouchEventType();
+            final boolean isTouched = inputTouchEventData.isTouched();
 
-            if ((this.mouseIsDown == false) && (inputTouchEventData.isTouched())) {
-                this.mouseIsDown = true;
-                this.mouseDownOnEntity = targetId;
-            }
+            this.calculateButtonState(targetId, isTouched);
 
-            if (!inputTouchEventData.isTouched()) {
-                this.mouseDownOnEntity = null;
-                this.mouseIsDown = false;
-            }
-
-            boolean reactToMouse = true;
-            boolean stillClickedDownOnThis = false;
-            if (this.mouseIsDown) {
-                if (this.mouseDownOnEntity != null) {
-                    if (!this.mouseDownOnEntity.equals(this.id)) {
-                        reactToMouse = false;
-                    } else {
-                        stillClickedDownOnThis = true;
-                    }
-                } else {
-                    reactToMouse = false;
-                }
-            }
-
-            if (reactToMouse) {
+            if (this.reactToMouse) {
                 // if the event targets THIS button
                 if ((targetId != null) && (targetId.equals(this.id))) {
-                    // DOWN event
-                    if (eventType == InputTouchEventType.TouchDown) {
-                        this.currentState = this.downState;
-                    } else {
-                        if ((eventType == InputTouchEventType.TouchUp) && (this.currentState == this.downState)) {
-                            ButtonClickEvent buttonClickEvent = new ButtonClickEvent();
-                            buttonClickEvent.set(targetId);
-
-                            this.buttonClickOutput.offer(buttonClickEvent);
-                        }
-
-                        if (inputTouchEventData.isTouched()) {
-                            this.currentState = this.downState;
-                        } else {
-                            this.currentState = this.overState;
-                        }
-                    }
+                    this.handleMouseOnButton(targetId, isTouched, eventType);
                 } else {
                     // event doesn't target THIS button
-                    if (!stillClickedDownOnThis) {
+                    if (!this.stillClickedDownOnThis) {
                         this.currentState = this.baseState;
                     }
                 }
