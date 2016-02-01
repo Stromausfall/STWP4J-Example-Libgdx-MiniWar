@@ -11,16 +11,37 @@ attackTarget
   orig: 96, 96
   offset: 0, 0
   index: -1
-fourUnit
+button_base
   rotate: false
   xy: 296, 34
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-infantry
+button_down
   rotate: false
   xy: 816, 164
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+button_over
+  rotate: false
+  xy: 362, 34
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+fourUnit
+  rotate: false
+  xy: 882, 164
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+infantry
+  rotate: false
+  xy: 428, 34
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -48,7 +69,7 @@ normalCity
   index: -1
 oneUnit
   rotate: false
-  xy: 362, 34
+  xy: 948, 164
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -62,7 +83,7 @@ selection
   index: -1
 threeUnit
   rotate: false
-  xy: 882, 164
+  xy: 522, 66
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -97,7 +118,7 @@ tile_owner
   index: -1
 twoUnit
   rotate: false
-  xy: 428, 34
+  xy: 588, 66
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
