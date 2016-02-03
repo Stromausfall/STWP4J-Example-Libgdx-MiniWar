@@ -1,131 +1,145 @@
 
 data1.png
-size: 1024,256
+size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 attackTarget
   rotate: false
-  xy: 2, 2
+  xy: 644, 782
   size: 96, 96
   orig: 96, 96
   offset: 0, 0
   index: -1
+background
+  rotate: false
+  xy: 2, 528
+  size: 640, 480
+  orig: 640, 480
+  offset: 0, 0
+  index: -1
 button_base
   rotate: false
-  xy: 296, 34
+  xy: 872, 944
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 button_down
   rotate: false
-  xy: 816, 164
+  xy: 2, 2
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 button_over
   rotate: false
-  xy: 362, 34
+  xy: 360, 360
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 fourUnit
   rotate: false
-  xy: 882, 164
+  xy: 644, 618
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 infantry
   rotate: false
-  xy: 428, 34
+  xy: 938, 944
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 moveTarget
   rotate: false
-  xy: 522, 132
+  xy: 774, 912
   size: 96, 96
   orig: 96, 96
   offset: 0, 0
   index: -1
 nextTurn
   rotate: false
-  xy: 100, 2
+  xy: 2, 68
   size: 96, 96
   orig: 96, 96
   offset: 0, 0
   index: -1
 normalCity
   rotate: false
-  xy: 620, 132
+  xy: 132, 198
   size: 96, 96
   orig: 96, 96
   offset: 0, 0
   index: -1
 oneUnit
   rotate: false
-  xy: 948, 164
+  xy: 426, 360
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
+progress
+  rotate: false
+  xy: 2, 426
+  size: 1000, 100
+  orig: 1000, 100
+  offset: 0, 0
+  index: -1
 selection
   rotate: false
-  xy: 198, 2
+  xy: 262, 328
   size: 96, 96
   orig: 96, 96
   offset: 0, 0
   index: -1
 threeUnit
   rotate: false
-  xy: 522, 66
+  xy: 644, 552
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tile_dirt
   rotate: false
-  xy: 2, 100
+  xy: 2, 296
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 tile_grass
   rotate: false
-  xy: 132, 100
+  xy: 644, 880
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 tile_mountain
   rotate: false
-  xy: 262, 100
+  xy: 2, 166
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 tile_owner
   rotate: false
-  xy: 392, 100
+  xy: 132, 296
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 twoUnit
   rotate: false
-  xy: 588, 66
+  xy: 492, 360
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 unsupplied
   rotate: false
-  xy: 718, 132
+  xy: 644, 684
   size: 96, 96
   orig: 96, 96
   offset: 0, 0

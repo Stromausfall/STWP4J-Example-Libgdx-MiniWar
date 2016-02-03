@@ -78,13 +78,17 @@ public class EntryPoint extends ApplicationEntryPointProcess {
                         new SpriteRenderData("increase_army", -280, 100, 45, RenderPositionUnit.Pixels, null, 0, true, "button_down")));
         
         final String fontName = "arial#24";
+        final SpriteRenderData background =
+                new SpriteRenderData("background", 0, 0, 0, RenderPositionUnit.Pixels, null, -100, false, "background");
+        final SpriteRenderData progress =
+                new SpriteRenderData("progress", 0, 0, 0, RenderPositionUnit.Pixels, null, -200, false, "progress");
         final TextRenderData textRenderData =
                 new TextRenderData("", -240, 210, 0, RenderPositionUnit.Pixels, Color.BLACK, 1, true, "increase industry", fontName);
         final TextRenderData textRenderData2 =
                 new TextRenderData("", -240, 110, 0, RenderPositionUnit.Pixels, Color.BLACK, 1, true, "increase army", fontName);
         
         final ChannelOutPort<RenderData> renderDataOutput =
-                renderDataChannel.createOutPort();
+                renderDataChannel.createOutPort(); 
         
         scheduler.addProcess(new LightweightProcess() {
             final ChannelInPort<ButtonClickEvent> clickEventInPort = buttonClickEventChannel.createInPort();
@@ -93,6 +97,8 @@ public class EntryPoint extends ApplicationEntryPointProcess {
             protected void preIteration() {                
                 renderDataOutput.offer(textRenderData);   
                 renderDataOutput.offer(textRenderData2);
+                renderDataOutput.offer(progress);
+                renderDataOutput.offer(background);
             }
             
             @Override
