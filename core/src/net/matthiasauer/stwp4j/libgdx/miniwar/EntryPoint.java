@@ -2,12 +2,7 @@ package net.matthiasauer.stwp4j.libgdx.miniwar;
 
 import java.util.Arrays;
 
-import com.badlogic.gdx.graphics.Color;
-
 import net.matthiasauer.stwp4j.Channel;
-import net.matthiasauer.stwp4j.ChannelInPort;
-import net.matthiasauer.stwp4j.ChannelOutPort;
-import net.matthiasauer.stwp4j.LightweightProcess;
 import net.matthiasauer.stwp4j.libgdx.application.ApplicationEntryPointProcess;
 import net.matthiasauer.stwp4j.libgdx.application.ApplicationEvent;
 import net.matthiasauer.stwp4j.libgdx.graphic.CameraChangeEvent;
@@ -18,7 +13,7 @@ import net.matthiasauer.stwp4j.libgdx.graphic.RenderPositionUnit;
 import net.matthiasauer.stwp4j.libgdx.graphic.RenderProcess;
 import net.matthiasauer.stwp4j.libgdx.graphic.RenderProcess.ResizeBehavior;
 import net.matthiasauer.stwp4j.libgdx.graphic.SpriteRenderData;
-import net.matthiasauer.stwp4j.libgdx.graphic.TextRenderData;
+import net.matthiasauer.stwp4j.libgdx.miniwar.model.test.WorldDisplayProcess;
 import net.matthiasauer.stwp4j.libgdx.miniwar.model.test.WorldInteraction;
 import net.matthiasauer.stwp4j.libgdx.miniwar.model.test.WorldProcess;
 import net.matthiasauer.stwp4j.libgdx.miniwar.model.test.WorldSnapShot;
@@ -57,58 +52,26 @@ public class EntryPoint extends ApplicationEntryPointProcess {
                 ResizeBehavior.KeepResolutionKeepAspect, renderDataChannel.createInPort(),
                 applicationEventChannel.createInPort(), inputTouchEventDataChannel.createOutPort(),
                 cameraChangeEventChannel.createInPort(), cameraStatusEventChannel.createOutPort()));
+        scheduler.addProcess(new WorldProcess(worldInteractionChannel.createInPort(),
+                worldSnapShotChannel.createOutPort(), buttonClickEventChannel.createInPort()));
         scheduler.addProcess(
-                new WorldProcess(worldInteractionChannel.createInPort(), worldSnapShotChannel.createOutPort()));
+                new WorldDisplayProcess(renderDataChannel.createOutPort(), worldSnapShotChannel.createInPort()));
 
-        scheduler.addProcess(
-                new ButtonProcess(
-                        renderDataChannel.createOutPort(),
-                        inputTouchEventDataChannel.createInPort(),
-                        buttonClickEventChannel.createOutPort(),
-                        new SpriteRenderData("increase_industry", -280, 200, 45, RenderPositionUnit.Pixels, null, 0, true, "button_base"),
-                        new SpriteRenderData("increase_industry", -280, 200, 45, RenderPositionUnit.Pixels, null, 0, true, "button_over"),
-                        new SpriteRenderData("increase_industry", -280, 200, 45, RenderPositionUnit.Pixels, null, 0, true, "button_down")));
-        scheduler.addProcess(
-                new ButtonProcess(
-                        renderDataChannel.createOutPort(),
-                        inputTouchEventDataChannel.createInPort(),
-                        buttonClickEventChannel.createOutPort(),
-                        new SpriteRenderData("increase_army", -280, 100, 45, RenderPositionUnit.Pixels, null, 0, true, "button_base"),
-                        new SpriteRenderData("increase_army", -280, 100, 45, RenderPositionUnit.Pixels, null, 0, true, "button_over"),
-                        new SpriteRenderData("increase_army", -280, 100, 45, RenderPositionUnit.Pixels, null, 0, true, "button_down")));
-        
-        final String fontName = "arial#24";
-        final SpriteRenderData background =
-                new SpriteRenderData("background", 0, 0, 0, RenderPositionUnit.Pixels, null, -100, false, "background");
-        final SpriteRenderData progress =
-                new SpriteRenderData("progress", 0, 0, 0, RenderPositionUnit.Pixels, null, -200, false, "progress");
-        final TextRenderData textRenderData =
-                new TextRenderData("", -240, 210, 0, RenderPositionUnit.Pixels, Color.BLACK, 1, true, "increase industry", fontName);
-        final TextRenderData textRenderData2 =
-                new TextRenderData("", -240, 110, 0, RenderPositionUnit.Pixels, Color.BLACK, 1, true, "increase army", fontName);
-        
-        final ChannelOutPort<RenderData> renderDataOutput =
-                renderDataChannel.createOutPort(); 
-        
-        scheduler.addProcess(new LightweightProcess() {
-            final ChannelInPort<ButtonClickEvent> clickEventInPort = buttonClickEventChannel.createInPort();
-
-            @Override
-            protected void preIteration() {                
-                renderDataOutput.offer(textRenderData);   
-                renderDataOutput.offer(textRenderData2);
-                renderDataOutput.offer(progress);
-                renderDataOutput.offer(background);
-            }
-            
-            @Override
-            protected void execute() {
-                ButtonClickEvent event = null;
-
-                while ((event = clickEventInPort.poll()) != null) {
-                    System.err.println("--> " + event.getId() + " clicked !");
-                }
-            }
-        });
+        scheduler.addProcess(new ButtonProcess(renderDataChannel.createOutPort(),
+                inputTouchEventDataChannel.createInPort(), buttonClickEventChannel.createOutPort(),
+                new SpriteRenderData("increase_industry", -280, 200, 45, RenderPositionUnit.Pixels, null, 0, true,
+                        "button_base"),
+                new SpriteRenderData("increase_industry", -280, 200, 45, RenderPositionUnit.Pixels, null, 0, true,
+                        "button_over"),
+                new SpriteRenderData("increase_industry", -280, 200, 45, RenderPositionUnit.Pixels, null, 0, true,
+                        "button_down")));
+        scheduler.addProcess(new ButtonProcess(renderDataChannel.createOutPort(),
+                inputTouchEventDataChannel.createInPort(), buttonClickEventChannel.createOutPort(),
+                new SpriteRenderData("increase_army", -280, 100, 45, RenderPositionUnit.Pixels, null, 0, true,
+                        "button_base"),
+                new SpriteRenderData("increase_army", -280, 100, 45, RenderPositionUnit.Pixels, null, 0, true,
+                        "button_over"),
+                new SpriteRenderData("increase_army", -280, 100, 45, RenderPositionUnit.Pixels, null, 0, true,
+                        "button_down")));
     }
 }
