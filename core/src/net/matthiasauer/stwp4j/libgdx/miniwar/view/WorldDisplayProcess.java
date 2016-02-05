@@ -1,4 +1,4 @@
-package net.matthiasauer.stwp4j.libgdx.miniwar.model.test;
+package net.matthiasauer.stwp4j.libgdx.miniwar.view;
 
 import com.badlogic.gdx.graphics.Color;
 
@@ -9,6 +9,7 @@ import net.matthiasauer.stwp4j.libgdx.graphic.RenderData;
 import net.matthiasauer.stwp4j.libgdx.graphic.RenderPositionUnit;
 import net.matthiasauer.stwp4j.libgdx.graphic.SpriteRenderData;
 import net.matthiasauer.stwp4j.libgdx.graphic.TextRenderData;
+import net.matthiasauer.stwp4j.libgdx.miniwar.model.WorldSnapShot;
 
 public class WorldDisplayProcess extends LightweightProcess {
 

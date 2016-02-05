@@ -1,4 +1,4 @@
-package net.matthiasauer.stwp4j.libgdx.miniwar.model.test;
+package net.matthiasauer.stwp4j.libgdx.miniwar.model;
 
 public class WorldSnapShot {
     public final double progress;
