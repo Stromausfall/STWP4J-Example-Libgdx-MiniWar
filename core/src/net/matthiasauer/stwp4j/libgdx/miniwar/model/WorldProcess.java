@@ -7,6 +7,7 @@ import net.matthiasauer.stwp4j.libgdx.miniwar.controller.WorldInteraction;
 import net.matthiasauer.stwp4j.libgdx.ui.ButtonClickEvent;
 
 public class WorldProcess extends LightweightProcess {
+    private int round;
     private final ChannelInPort<WorldInteraction> worldInteractionChannel;
     private final ChannelOutPort<WorldSnapShot> worldSnapShotChannel;
 
@@ -14,6 +15,13 @@ public class WorldProcess extends LightweightProcess {
             ChannelOutPort<WorldSnapShot> worldSnapShotChannel) {
         this.worldInteractionChannel = worldInteractionChannel;
         this.worldSnapShotChannel = worldSnapShotChannel;
+        this.round = 0;
+    }
+    
+    @Override
+    protected void preIteration() {
+        this.worldSnapShotChannel.offer(
+                new WorldSnapShot(round, 50, 5, 6, 55, 50));
     }
 
     @Override

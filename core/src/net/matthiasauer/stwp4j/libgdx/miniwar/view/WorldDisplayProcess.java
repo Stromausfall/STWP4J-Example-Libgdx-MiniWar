@@ -22,9 +22,9 @@ public class WorldDisplayProcess extends LightweightProcess {
             1, true, "increase industry", fontName);
     final TextRenderData textRenderData2 = new TextRenderData("", -240, 110, 0, RenderPositionUnit.Pixels, Color.BLACK,
             1, true, "increase army", fontName);
-
     private final ChannelOutPort<RenderData> renderDataOutPort;
     private final ChannelInPort<WorldSnapShot> worldSnapShotInPort;
+    private WorldSnapShot latest = new WorldSnapShot(0, 0, 0, 0, 0, 0);
 
     public WorldDisplayProcess(ChannelOutPort<RenderData> renderDataOutPort,
             ChannelInPort<WorldSnapShot> worldSnapShotInPort) {
@@ -38,9 +38,22 @@ public class WorldDisplayProcess extends LightweightProcess {
         renderDataOutPort.offer(textRenderData2);
         renderDataOutPort.offer(progress);
         renderDataOutPort.offer(background);
+
+        // show turn label
+        renderDataOutPort.offer(new TextRenderData("turn label", -50, 50, 0, RenderPositionUnit.Pixels, null, 5, false,
+                "Turn #" + this.latest.round, this.fontName));
+
+        // show progress label
+        renderDataOutPort.offer(new TextRenderData("progress label", -10, 10, 0, RenderPositionUnit.Pixels, null, 5, false,
+                this.latest.round + "%", this.fontName));
     }
 
     @Override
     protected void execute() {
+        WorldSnapShot snapShot = null;
+
+        while ((snapShot = this.worldSnapShotInPort.poll()) != null) {
+            this.latest = snapShot;
+        }
     }
 }
