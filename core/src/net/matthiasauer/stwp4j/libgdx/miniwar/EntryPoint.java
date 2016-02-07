@@ -73,11 +73,19 @@ public class EntryPoint extends ApplicationEntryPointProcess {
                         "button_down")));
         scheduler.addProcess(new ButtonProcess(renderDataChan.createOutPort(),
                 inputTouchEventDataChannel.createInPort(), buttonClickChan.createOutPort(),
-                new SpriteRenderData("increase_army", -280, 100, 45, RenderPositionUnit.Pixels, null, 0, true,
+                new SpriteRenderData("increase_army", -280, 130, 45, RenderPositionUnit.Pixels, null, 0, true,
                         "button_base"),
-                new SpriteRenderData("increase_army", -280, 100, 45, RenderPositionUnit.Pixels, null, 0, true,
+                new SpriteRenderData("increase_army", -280, 130, 45, RenderPositionUnit.Pixels, null, 0, true,
                         "button_over"),
-                new SpriteRenderData("increase_army", -280, 100, 45, RenderPositionUnit.Pixels, null, 0, true,
+                new SpriteRenderData("increase_army", -280, 130, 45, RenderPositionUnit.Pixels, null, 0, true,
+                        "button_down")));
+        scheduler.addProcess(new ButtonProcess(renderDataChan.createOutPort(),
+                inputTouchEventDataChannel.createInPort(), buttonClickChan.createOutPort(),
+                new SpriteRenderData("attack", -280, 60, 45, RenderPositionUnit.Pixels, null, 0, true,
+                        "button_base"),
+                new SpriteRenderData("attack", -280, 60, 45, RenderPositionUnit.Pixels, null, 0, true,
+                        "button_over"),
+                new SpriteRenderData("attack", -280, 60, 45, RenderPositionUnit.Pixels, null, 0, true,
                         "button_down")));
     }
 }

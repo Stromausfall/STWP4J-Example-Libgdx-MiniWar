@@ -20,8 +20,10 @@ public class WorldDisplayProcess extends LightweightProcess {
             false, "progress");
     final TextRenderData textRenderData = new TextRenderData("", -240, 210, 0, RenderPositionUnit.Pixels, Color.BLACK,
             1, true, "increase industry", fontName);
-    final TextRenderData textRenderData2 = new TextRenderData("", -240, 110, 0, RenderPositionUnit.Pixels, Color.BLACK,
+    final TextRenderData textRenderData2 = new TextRenderData("", -240, 140, 0, RenderPositionUnit.Pixels, Color.BLACK,
             1, true, "increase army", fontName);
+    final TextRenderData textRenderData3 = new TextRenderData("", -240, 70, 0, RenderPositionUnit.Pixels, Color.BLACK,
+            1, true, "attack", fontName);
     private final ChannelOutPort<RenderData> renderDataOutPort;
     private final ChannelInPort<WorldSnapShot> worldSnapShotInPort;
     private WorldSnapShot latest = new WorldSnapShot(0, 0, 0, 0, 0, 0);
@@ -36,6 +38,7 @@ public class WorldDisplayProcess extends LightweightProcess {
     protected void preIteration() {
         renderDataOutPort.offer(textRenderData);
         renderDataOutPort.offer(textRenderData2);
+        renderDataOutPort.offer(textRenderData3);
         renderDataOutPort.offer(progress);
         renderDataOutPort.offer(background);
 
@@ -46,6 +49,17 @@ public class WorldDisplayProcess extends LightweightProcess {
         // show progress label
         renderDataOutPort.offer(new TextRenderData("progress label", -10, 10, 0, RenderPositionUnit.Pixels, null, 5, false,
                 this.latest.round + "%", this.fontName));
+
+        // show army and industry stats
+        renderDataOutPort.offer(new TextRenderData("army 1 size", -300, -100, 0, RenderPositionUnit.Pixels, Color.BLUE, 5, false,
+                "Player Army Size : " + this.latest.player1Army, this.fontName));
+        renderDataOutPort.offer(new TextRenderData("industry 1 size", -300, -150, 0, RenderPositionUnit.Pixels, Color.BLUE, 5, false,
+                "Player Factories : " + this.latest.player1Factories, this.fontName));
+
+        renderDataOutPort.offer(new TextRenderData("army 2 size", 50, -100, 0, RenderPositionUnit.Pixels, Color.CORAL, 5, false,
+                "Enemy Army Size : " + this.latest.player2Army, this.fontName));
+        renderDataOutPort.offer(new TextRenderData("industry 2 size", 50, -150, 0, RenderPositionUnit.Pixels, Color.CORAL, 5, false,
+                "Enemy Factories : " + this.latest.player2Factories, this.fontName));
     }
 
     @Override
