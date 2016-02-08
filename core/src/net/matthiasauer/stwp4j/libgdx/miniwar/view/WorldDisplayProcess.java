@@ -11,8 +11,11 @@ import net.matthiasauer.stwp4j.libgdx.graphic.SpriteRenderData;
 import net.matthiasauer.stwp4j.libgdx.graphic.TextRenderData;
 import net.matthiasauer.stwp4j.libgdx.miniwar.model.WorldSnapShot;
 
+/**
+ * This process transforms WorldSnapshots into RenderData
+ * that will be displayed using the RenderProcess
+ */
 public class WorldDisplayProcess extends LightweightProcess {
-
     final String fontName = "arial#24";
     final SpriteRenderData background = new SpriteRenderData("background", 0, 0, 0, RenderPositionUnit.Pixels, null,
             -100, false, "background");
