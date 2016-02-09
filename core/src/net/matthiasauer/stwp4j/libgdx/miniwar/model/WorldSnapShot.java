@@ -8,13 +8,12 @@ public class WorldSnapShot {
     public final int player1Army;
     public final int player2Army;
 
-    public WorldSnapShot(int round, double progress, int player1Factories, int player2Factories, int player1Army,
-            int player2Army) {
+    WorldSnapShot(int round, double progress, PlayerData player1, PlayerData player2) {
         this.round = round;
         this.progress = progress;
-        this.player1Army = player1Army;
-        this.player2Army = player2Army;
-        this.player1Factories = player1Factories;
-        this.player2Factories = player2Factories;
+        this.player1Army = player1.armySize;
+        this.player2Army = player2.armySize;
+        this.player1Factories = player1.factories;
+        this.player2Factories = player2.factories;
     }
 }
