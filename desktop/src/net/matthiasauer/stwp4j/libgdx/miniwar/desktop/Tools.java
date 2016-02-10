@@ -2,8 +2,6 @@ package net.matthiasauer.stwp4j.libgdx.miniwar.desktop;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
